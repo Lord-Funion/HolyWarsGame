@@ -144,9 +144,9 @@ Quest.prototype.startQuest = function(resource){    //Generic Resource quest
 				faith += resourceEarned;
 				statFaithCollected += resourceEarned;
 				statTotalFaithCollected += resourceEarned;
-				document.getElementById('faith').innterHTML = fnum(faith);
-				document.getElementById('stattotalfaithcollected').innterHTML = fnum(statTotalFaithCollected);
-				document.getElementById('statFaithCollected').innterHTML = fnum(statFaithCollected);
+				document.getElementById('faith').innerHTML = fnum(faith);
+				document.getElementById('stattotalfaithcollected').innerHTML = fnum(statTotalFaithCollected);
+				document.getElementById('statFaithCollected').innerHTML = fnum(statFaithCollected);
 				finishString = "<br/>Your units return from spreading the Gospel to people in yoru kingdom! They brought back <img src = 'images/faithsmall.png' title ='Faith' >" + fnum(resourceEarned) + " faith added to your kingdom.";
 			break;
 			
