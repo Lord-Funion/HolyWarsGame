@@ -282,6 +282,11 @@ function loadQuest(QuestName, percent, unit, numUnit){
 			goldQuest.startQuest('gold');
 			UnitOnQuest = unit;
 		break;	
+		
+		case 'Spread the Gospel':
+			faithQuest.startQuest('faith');
+			UnitOnQuest = unit;
+		break;
 
 		case 'Slay Treants':
 			woodQuest.startQuest('wood');
@@ -335,6 +340,9 @@ function btnSendQuest(){
 			goldQuest.startQuest('gold');
 			notify();
 		 break;
+
+		 case 'Spread the Gospel':
+		 	faithQuest.startQuest('faith');
 
 		 case 'Slay Treants':
 //			console.log('Slay Treants');
@@ -464,6 +472,8 @@ var soulsQuest = new Quest('Hunt Lesser Demons ', soulsQuestDesc, 'QuestProgBarB
 var relicHuntDesc = "";
 var RelicHunt = new Quest('Relic Hunt', relicHuntDesc, 'QuestProgBarBox', 'QuestProgBar', 'btnQuestGo','goblinDefeatAlert',0,1,750);
 
+var faithQuestDesc = "";
+var faithQuest = new Quest('Spread the Gospel', faithQuestDesc, 'QuestProgBarBox', 'QuestProgBar', 'btnQuestGo', 'faithQuestFinishAlert', 0, 1, 750);
 
 function rollForFragment(){
 	var unitType = $('#unitSelectPicker').selectpicker('val');
@@ -678,6 +688,15 @@ $(function() {
 			questDescription = "Send your units out to look for mysterious relics. <br>Requires Paladins or higher units. <br>Reward: Chance at relics";
 			document.getElementById('questDescString').innerHTML = questDescription;
 		break;
+
+		case 'Spread the Gospel':
+			$('#PaladinOption').prop("disabled", false);
+			$('#KnightOption').prop("disabled", false);
+			$('#SquireOption').prop("disabled", false);
+			QuestCheckUnitOptions();
+			$('.selectpicker').selectpicker('refresh');
+			questDescription = "Send your units to spread the Gospel in " + KingdomName + ". <br>Reward: <img src = 'images/faithsmall.png; title='Faith'>Faith";
+			document.getElementById('questDescString').innerHTML = questDescription;
 		
 		case 'Hunt Lesser Demons':
 			$('#PaladinOption').prop("disabled", false);
