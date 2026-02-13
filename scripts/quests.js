@@ -138,6 +138,17 @@ Quest.prototype.startQuest = function(resource){    //Generic Resource quest
 				 document.getElementById('statgoldcollected').innerHTML = fnum(statGoldCollected);
 				 finishString = "<br/>Your units return from helping out the people in your kingdom! They bring back <img src = 'images/money_goldsmall.png' title ='Gold' >" + fnum(resourceEarned) + " gold to add to your coffers.";
 			break;
+
+			case 'faith':
+				console.log(QuestDuration + " seconds * " + faithpersec + " = " + resourceEarned);
+				faith += resourceEarned;
+				statFaithCollected += resourceEarned;
+				statTotalFaithCollected += resourceEarned;
+				document.getElementById('faith').innterHTML = fnum(faith);
+				document.getElementById('stattotalfaithcollected').innterHTML = fnum(statTotalFaithCollected);
+				document.getElementById('statFaithCollected').innterHTML = fnum(statFaithCollected);
+				finishString = "<br/>Your units return from spreading the Gospel to people in yoru kingdom! They brought back <img src = 'images/faithsmall.png' title ='Faith' >" + fnum(resourceEarned) + " faith added to your kingdom.";
+			break;
 			
 			case 'wood':
 //				 resourceEarned = QuestDuration*woodpersec;
