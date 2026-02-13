@@ -256,6 +256,11 @@ function questCalcReward(type, unit){
 			console.log(QuestDuration * unitPower * goldpersec);
 			return QuestDuration * unitPower * goldpersec;
 		break;
+
+		case 'faith':
+			console.log(QuestDuration * unitPower * faith)
+			return QuestDuration * unitPower * faithpersec;
+		break;
 		
 		case 'wood':
 			console.log(QuestDuration * unitPower * woodpersec);
@@ -354,6 +359,8 @@ function btnSendQuest(){
 
 		 case 'Spread the Gospel':
 		 	faithQuest.startQuest('faith');
+			notify();
+		 break;
 
 		 case 'Slay Treants':
 //			console.log('Slay Treants');
@@ -708,6 +715,7 @@ $(function() {
 			$('.selectpicker').selectpicker('refresh');
 			questDescription = "Send your units to spread the Gospel in " + KingdomName + ". <br>Reward: <img src = 'images/faithsmall.png; title='Faith'>Faith";
 			document.getElementById('questDescString').innerHTML = questDescription;
+		break;
 		
 		case 'Hunt Lesser Demons':
 			$('#PaladinOption').prop("disabled", false);
