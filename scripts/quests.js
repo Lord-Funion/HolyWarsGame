@@ -713,7 +713,7 @@ $(function() {
 			$('#SquireOption').prop("disabled", false);
 			QuestCheckUnitOptions();
 			$('.selectpicker').selectpicker('refresh');
-			questDescription = "Send your units to spread the Gospel in " + KingdomName + ". <br>Reward: <img src = 'images/faithsmall.png; title='Faith'>Faith";
+			questDescription = "Send your units to spread the Gospel in " + KingdomName + ". <br>Reward: <img src = 'images/faithsmall.png' title='Faith'>Faith";
 			document.getElementById('questDescString').innerHTML = questDescription;
 		break;
 		
