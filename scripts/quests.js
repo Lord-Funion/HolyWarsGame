@@ -147,7 +147,7 @@ Quest.prototype.startQuest = function(resource){    //Generic Resource quest
 				document.getElementById('faith').innerHTML = fnum(faith);
 				document.getElementById('statTotalFaithCollected').innerHTML = fnum(statTotalFaithCollected);
 				document.getElementById('statFaithCollected').innerHTML = fnum(statFaithCollected);
-				finishString = "<br/>Your units return from spreading the Gospel to people in yoru kingdom! They brought back <img src = 'images/faithsmall.png' title ='Faith' >" + fnum(resourceEarned) + " faith added to your kingdom.";
+				finishString = "<br/>Your units return from spreading the Gospel to people in your kingdom! They brought back <img src = 'images/faithsmall.png' title ='Faith' >" + fnum(resourceEarned) + " faith added to your kingdom.";
 			break;
 			
 			case 'wood':
@@ -258,7 +258,7 @@ function questCalcReward(type, unit){
 		break;
 
 		case 'faith':
-			console.log(QuestDuration * unitPower * faith)
+			console.log(QuestDuration * unitPower * faith);
 			return QuestDuration * unitPower * faithpersec;
 		break;
 		
