@@ -147,7 +147,12 @@ Quest.prototype.startQuest = function(resource){    //Generic Resource quest
 				document.getElementById('faith').innerHTML = fnum(faith);
 				document.getElementById('statTotalFaithCollected').innerHTML = fnum(statTotalFaithCollected);
 				document.getElementById('statFaithCollected').innerHTML = fnum(statFaithCollected);
-				finishString = "<br/>Your units return from spreading the Gospel to people in your kingdom! They brought back <img src = 'images/faithsmall.png' title ='Faith' >" + fnum(resourceEarned) + " faith added to your kingdom.";
+				$.notify({
+					title: "<strong>Quest Finished! </strong>",
+					message: "<br/>Your units return from spreading the Gospel to people in your kingdom! They brought back <img src = 'images/faithsmall.png' title ='Faith' >" + fnum(resourceEarned) + " faith added to your kingdom.";,
+					delay: 25000},{
+					type: 'success'
+				});	
 			break;
 			
 			case 'wood':
