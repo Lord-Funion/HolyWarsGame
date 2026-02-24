@@ -336,7 +336,9 @@ function clickThing(number, type)
 
 function renameKingdom(){
 //	KingdomName = prompt("Name your kingdom", "");
-	
+				$("#BorosCollapse").collapse('show');
+				$("#OuroCollapse").collapse('show');
+				$("#CerberusCollapse").collapse('show');
 		bootbox.prompt({
 		  title: "Name your Kingdom",
 		  value: KingdomName,
