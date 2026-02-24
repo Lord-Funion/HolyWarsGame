@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XOR Tool</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        textarea { width: 100%; height: 100px; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .result-box { background: #f9f9f9; border: 1px solid #ddd; padding: 15px; min-height: 50px; position: relative; word-wrap: break-word; white-space: pre-wrap; }
+        button { cursor: pointer; padding: 8px 15px; border-radius: 4px; border: 1px solid #007bff; background: #007bff; color: white; }
+        button:hover { background: #0056b3; }
+        .copy-btn { background: #28a745; border-color: #28a745; margin-top: 10px; }
+        .copy-btn:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+    <h2 id="modeTitle">Mode: Convert TO XOR</h2>
+    
+    <div class="controls">
+        <button onclick="toggleMode()">🔄 Switch Mode</button>
+    </div>
+
+    <textarea id="userInput" placeholder="Enter text..." oninput="process()"></textarea>
+
+    <div class="result-box">
+        <strong>Result:</strong>
+        <p id="displayText"></p>
+    </div>
+    
+    <button class="copy-btn" onclick="copyToClipboard()">📋 Copy Result</button>
+
+    <script>
+        let isEncryptMode = true;
+
+        function toggleMode() {
+            isEncryptMode = !isEncryptMode;
+            document.getElementById("modeTitle").innerText = isEncryptMode ? "Mode: Convert TO XOR" : "Mode: Convert FROM XOR";
+            process(); // Re-process current text in new mode
+        }
+
+        function xor_str(input) {
+            var xor_key = 6;
+            var the_res = "";
+            for(var i = 0; i < input.length; i++) {
+                the_res += String.fromCharCode(xor_key ^ input.charCodeAt(i));
+            }
+            return the_res;
+        }
+
+        function process() {
+            const inputVal = document.getElementById("userInput").value;
+            document.getElementById("displayText").innerText = xor_str(inputVal);
+        }
+
+        async function copyToClipboard() {
+            const text = document.getElementById("displayText").innerText;
+            try {
+                await navigator.clipboard.writeText(text);
+                alert("Copied to clipboard!");
+            } catch (err) {
+                console.error("Failed to copy: ", err);
+            }
+        }
+    </script>
+
+</body>
+</html>
