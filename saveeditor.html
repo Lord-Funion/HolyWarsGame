@@ -1,99 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Game Save XOR Editor</title>
+    <title>XOR Tool</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; background: #f0f2f5; }
-        textarea { width: 100%; height: 120px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; }
-        .controls { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
-        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #007bff; color: white; }
-        td { cursor: edit; }
-        td:focus { background: #fff9c4; outline: 2px solid #007bff; }
-        .btn { cursor: pointer; padding: 10px 20px; border-radius: 4px; border: none; font-weight: bold; }
-        .primary { background: #007bff; color: white; }
-        .success { background: #28a745; color: white; }
-        .copy-btn { background: #6c757d; color: white; }
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        textarea { width: 100%; height: 100px; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .result-box { background: #f9f9f9; border: 1px solid #ddd; padding: 15px; min-height: 50px; position: relative; word-wrap: break-word; white-space: pre-wrap; }
+        button { cursor: pointer; padding: 8px 15px; border-radius: 4px; border: 1px solid #007bff; background: #007bff; color: white; }
+        button:hover { background: #0056b3; }
+        .copy-btn { background: #28a745; border-color: #28a745; margin-top: 10px; }
+        .copy-btn:hover { background: #218838; }
     </style>
 </head>
 <body>
 
-    <h2>🎮 Game Save XOR Editor</h2>
+    <h2 id="modeTitle">Mode: Convert TO XOR</h2>
     
-    <label><strong>1. Input XORed String:</strong></label>
-    <textarea id="userInput" placeholder='Paste your XORed save string here...'></textarea>
-
     <div class="controls">
-        <button class="btn primary" onclick="loadAndDecrypt()">🔓 Decrypt & Load to Table</button>
-        <button class="btn success" onclick="saveAndEncrypt()">🔒 Apply Changes & XOR</button>
-        <button class="btn copy-btn" onclick="copyResult()">📋 Copy Output</button>
+        <button onclick="toggleMode()">🔄 Switch Mode</button>
     </div>
 
-    <div id="tableContainer">
-        <!-- Table will be generated here -->
+    <textarea id="userInput" placeholder="Enter text..." oninput="process()"></textarea>
+
+    <div class="result-box">
+        <strong>Result:</strong>
+        <p id="displayText"></p>
     </div>
+    
+    <button class="copy-btn" onclick="copyToClipboard()">📋 Copy Result</button>
 
     <script>
-        const XOR_KEY = 6;
+        let isEncryptMode = true;
 
-        function xor_logic(input) {
-            let res = "";
-            for(let i = 0; i < input.length; i++) {
-                res += String.fromCharCode(XOR_KEY ^ input.charCodeAt(i));
-            }
-            return res;
+        function toggleMode() {
+            isEncryptMode = !isEncryptMode;
+            document.getElementById("modeTitle").innerText = isEncryptMode ? "Mode: Convert TO XOR" : "Mode: Convert FROM XOR";
+            process(); // Re-process current text in new mode
         }
 
-        function loadAndDecrypt() {
-            const raw = document.getElementById("userInput").value;
-            const decrypted = xor_logic(raw);
-            
+        function xor_str(input) {
+            var xor_key = 6;
+            var the_res = "";
+            for(var i = 0; i < input.length; i++) {
+                the_res += String.fromCharCode(xor_key ^ input.charCodeAt(i));
+            }
+            return the_res;
+        }
+
+        function process() {
+            const inputVal = document.getElementById("userInput").value;
+            document.getElementById("displayText").innerText = xor_str(inputVal);
+        }
+
+        async function copyToClipboard() {
+            const text = document.getElementById("displayText").innerText;
             try {
-                const data = JSON.parse(decrypted);
-                buildTable(data);
-            } catch (e) {
-                alert("Error: Decrypted text is not valid JSON. Check your input!");
+                await navigator.clipboard.writeText(text);
+                alert("Copied to clipboard!");
+            } catch (err) {
+                console.error("Failed to copy: ", err);
             }
-        }
-
-        function buildTable(obj) {
-            let html = `<table><thead><tr><th>Key</th><th>Value (Click to Edit)</th></tr></thead><tbody>`;
-            for (let key in obj) {
-                html += `<tr>
-                    <td><strong>${key}</strong></td>
-                    <td contenteditable="true" data-key="${key}">${obj[key]}</td>
-                </tr>`;
-            }
-            html += `</tbody></table>`;
-            document.getElementById("tableContainer").innerHTML = html;
-        }
-
-        function saveAndEncrypt() {
-            const cells = document.querySelectorAll("[data-key]");
-            let updatedData = {};
-            
-            cells.forEach(cell => {
-                let val = cell.innerText;
-                // Attempt to preserve numbers/booleans if they look like them
-                if (!isNaN(val) && val.trim() !== "") val = Number(val);
-                if (val === "true") val = true;
-                if (val === "false") val = false;
-                
-                updatedData[cell.getAttribute("data-key")] = val;
-            });
-
-            const jsonStr = JSON.stringify(updatedData);
-            const encrypted = xor_logic(jsonStr);
-            
-            document.getElementById("userInput").value = encrypted;
-            alert("Changes saved back to text box above!");
-        }
-
-        async function copyResult() {
-            const text = document.getElementById("userInput").value;
-            await navigator.clipboard.writeText(text);
-            alert("Copied to clipboard!");
         }
     </script>
 
