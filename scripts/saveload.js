@@ -1,18 +1,57 @@
-//Save and Loading Script for HW //
-	var saveTime;
-	var myBool;
-	
-	function save(key, value){
-		if(value !== value){		//Best way to check for NaN atm
-			console.log(key + ' is NaN, setting value to 0.');
-			eval(key + ' = 0');
-			localStorage.setItem(key, 0);
-		}
-		else{
-			localStorage.setItem(key, value);			
-		}
-		
-	}
+// Save and Loading Script for HW
+// SECURITY: Removed eval() and XSS vulnerabilities
+// Uses JSON.parse/stringify for safe data handling
+
+const GAME_VERSION = '0.7.3';
+const STORAGE_PREFIX = 'holywars_';
+
+// Safe localStorage wrapper
+const GameStorage = {
+  set(key, value) {
+    try {
+      const safeKey = STORAGE_PREFIX + key;
+      const safeValue = typeof value === 'string' ? value : JSON.stringify(value);
+      localStorage.setItem(safeKey, safeValue);
+    } catch (e) {
+      console.error('Storage error:', e);
+    }
+  },
+
+  get(key) {
+    try {
+      const safeKey = STORAGE_PREFIX + key;
+      const value = localStorage.getItem(safeKey);
+      return value;
+    } catch (e) {
+      console.error('Storage error:', e);
+      return null;
+    }
+  },
+
+  clear() {
+    try {
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith(STORAGE_PREFIX)) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (e) {
+      console.error('Storage error:', e);
+    }
+  }
+};
+
+function save(key, value) {
+  if (value !== value) { // NaN check
+    console.log(key + ' is NaN, setting value to 0.');
+    GameStorage.set(key, 0);
+  } else if (value === null || value === undefined) {
+    GameStorage.set(key, 0);
+  } else {
+    GameStorage.set(key, value);
+  }
+}
 
 	function saveCookie(){
 		if(typeof(Storage) !== "undefined"){
