@@ -1,2 +1,6 @@
 # HolyWar
 An incremental game about you fighting a Holy War against The Evil One.
+## Help Needed!
+If you know JS, HTMl, and/or CSS, please contact me.
+
+Email: (mailto:lordfunion@gmail.com)
