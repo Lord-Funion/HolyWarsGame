@@ -1,0 +1,11 @@
+pages:
+  image: alpine:latest
+  script:
+    - echo "Deploying static HTML5 site"
+    # If your files are already in 'public', this job just exits and uploads them.
+    # If they are in the root, you'd run: mkdir .public && cp -r * .public && mv .public public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
