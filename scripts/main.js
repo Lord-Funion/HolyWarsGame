@@ -335,20 +335,29 @@ function clickThing(number, type)
 }
 
 function renameKingdom(){
-//	KingdomName = prompt("Name your kingdom", "");
-		bootbox.prompt({
-		  title: "Name your Kingdom",
-		  value: KingdomName,
-		  callback: function(result) {
-			if (result === "") {
-				document.getElementById("KingdomName").innerHTML = "Kingdom";
-			} else {
-				KingdomName = result;
-				document.getElementById("navKingdomName").innerHTML = KingdomName;
-				document.title = "Holy Wars - " + KingdomName;
-			}
-		  }
-		});
+  bootbox.prompt({
+    title: "Name your Kingdom",
+    value: KingdomName,
+    callback: function(result) {
+      if (result === null) {
+        return;
+      }
+      if (result === "") {
+        KingdomName = "Kingdom";
+      } else {
+        KingdomName = sanitizeInput(result);
+      }
+      document.getElementById("KingdomName").textContent = KingdomName;
+      document.getElementById("navKingdomName").textContent = KingdomName;
+      document.title = "Holy Wars - " + KingdomName;
+    }
+  });
+}
+
+function sanitizeInput(input) {
+  const div = document.createElement('div');
+  div.textContent = input;
+  return div.innerHTML;
 }
 
 function checkKingdomName(){
