@@ -15,9 +15,13 @@
 	}
 
 	function saveCookie(){
-		if(typeof(Storage) !== "undefined"){
-		saveTime = Date.now();
-		save("saveTime", saveTime);
+		if(typeof(Storage) === "undefined"){
+			alert("Sorry! Your web browser does not support local saving. Please try a newer version of your browser.");
+			return;
+		}
+		try{
+			saveTime = Date.now();
+			save("saveTime", saveTime);
 		
 		//Currency variables
 		save("gold",gold);
