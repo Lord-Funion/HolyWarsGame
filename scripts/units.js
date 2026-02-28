@@ -1,11 +1,12 @@
 //HW Units
 
-var Unit = function(name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNextSilverCost, htmlNextFaithCost, htmlNextSoulCost, htmlNextTomeCost, htmlNextManaCost, htmlBuyBtn, 
-					htmlBuyBtn10, goldCost, ironCost, silverCost, faithCost, soulCost, tomeCost, manaCost, costMult, description, costAdj, hasReqUnit, reqUnit, htmlReqUnit){
+var Unit = function(name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNextSteelCost, htmlNextSilverCost, htmlNextFaithCost, htmlNextSoulCost, htmlNextTomeCost, htmlNextManaCost, htmlBuyBtn, 
+					htmlBuyBtn10, goldCost, ironCost, steelCost, silverCost, faithCost, soulCost, tomeCost, manaCost, costMult, description, costAdj, hasReqUnit, reqUnit, htmlReqUnit){
 	this.name = name;
 	this.htmlNumRef = htmlNumRef;
 	this.htmlNextGoldCost = htmlNextGoldCost;
 	this.htmlNextIronCost = htmlNextIronCost;
+	this.htmlNextSteelCost = htmlNextSteelCost;
 	this.htmlNextSilverCost = htmlNextSilverCost;
 	this.htmlNextFaithCost = htmlNextFaithCost;
 	this.htmlNextSoulCost = htmlNextSoulCost;
@@ -15,6 +16,7 @@ var Unit = function(name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNe
 	this.htmlBuyBtn = htmlBuyBtn;
 	this.goldCost = goldCost;
 	this.ironCost = ironCost;
+	this.steelCost = steelCost;
 	this.silverCost = silverCost;
 	this.faithCost = faithCost;
 	this.soulCost = soulCost;
@@ -35,6 +37,7 @@ var Unit = function(name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNe
 	this.spiritPower = 0;
 	this.curGoldCost = 0;
 	this.curIronCost = 0;
+	this.curSteelCost = 0;
 	this.curSilverCost = 0;	
 	this.curFaithCost = 0;
 	this.curSoulCost = 0;
@@ -42,6 +45,7 @@ var Unit = function(name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNe
 	this.curManaCost = 0;
 	this.nextGoldCost = 0;
 	this.nextIronCost = 0;
+	this.nextSteelCost = 0;
 	this.nextSilverCost = 0;
 	this.nextFaithCost = 0;
 	this.nextSoulCost = 0;
@@ -78,7 +82,7 @@ Unit.prototype.recalcCost10 = function(){
     this.gold10 += Math.floor(this.goldCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
 //    this.wood10 += Math.floor(this.woodCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
     this.iron10 += Math.floor(this.ironCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
- //   this.steel10 += Math.floor(this.steelCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
+	this.steel10 += Math.floor(this.steelCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
     this.silver10 += Math.floor(this.silverCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
     this.faith10 += Math.floor(this.faithCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
 	this.soul10 += Math.floor(this.soulCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest + i));
@@ -129,6 +133,7 @@ Unit.prototype.checkReqUnit10 = function(){
 Unit.prototype.buyOne = function(){
 	this.curGoldCost =  Math.floor(this.goldCost * Math.pow(this.costMult,this.number-this.costAdj+this.onQuest));
 	this.curIronCost =  Math.floor(this.ironCost * Math.pow(this.costMult,this.number+this.onQuest));
+	this.curSteelCost =  Math.floor(this.steelCost * Math.pow(this.costMult,this.number+this.onQuest));
 	this.curSilverCost =  Math.floor(this.silverCost * Math.pow(this.costMult,this.number+this.onQuest));
 	this.curFaithCost =  Math.floor(this.faithCost * Math.pow(this.costMult,this.number+this.onQuest));
 	this.curSoulCost =  Math.floor(this.soulCost * Math.pow(this.costMult,this.number+this.onQuest));
@@ -137,10 +142,11 @@ Unit.prototype.buyOne = function(){
 	
 	if(this.hasReqUnit === false || (this.hasReqUnit === true && this.reqUnit.number > 0)){
 
-		if(gold >= this.curGoldCost && iron >= this.curIronCost && silver >= this.curSilverCost && faith >= this.curFaithCost && souls >= this.curSoulCost && tomes >= this.tomeCost && mana >= this.manaCost){    //checks that the player can afford the Unit
+		if(gold >= this.curGoldCost && iron >= this.curIronCost && steel >= this.curSteelCost && silver >= this.curSilverCost && faith >= this.curFaithCost && souls >= this.curSoulCost && tomes >= this.curTomeCost && mana >= this.curManaCost){    //checks that the player can afford the Unit
 			this.number += 1;                                  							 	  //increases number of Unit
 			gold -= this.curGoldCost;                     										      //removes the gold spent
 			iron -= this.curIronCost;                                                                   //removes the iron spent
+			steel -= this.curSteelCost;                                                               //removes the steel spent
 			silver -= this.curSilverCost;                                                             //removes the silver spent
 			faith -= this.curFaithCost;                                                                //removes the faith spent
 			souls -= this.curSoulCost;                                                                 //removes the souls spent
@@ -179,6 +185,11 @@ Unit.prototype.recalcCost = function(){
 		document.getElementById(this.htmlNextIronCost).innerHTML = fnum(this.curIronCost);  						      //updates the Unit iron cost for the user
 	}
 	
+	if(this.htmlNextSteelCost != 'none'){
+		this.curSteelCost = Math.floor(this.steelCost * Math.pow(this.costMult,this.number+this.onQuest));                      //works out the steel cost of the next Unit
+		document.getElementById(this.htmlNextSteelCost).innerHTML = fnum(this.curSteelCost);  						      //updates the Unit steel cost for the user
+	}
+	
 	if(this.htmlNextSilverCost != 'none'){
 		this.curSilverCost = Math.floor(this.silverCost * Math.pow(this.costMult,this.number+this.onQuest));                    //works out the silver cost of the next Unit	
 		document.getElementById(this.htmlNextSilverCost).innerHTML = fnum(this.curSilverCost);  						      //updates the Unit silver cost for the user
@@ -208,7 +219,7 @@ Unit.prototype.recalcCost = function(){
 Unit.prototype.canBuy = function(){
 	this.recalcCost();
 	btn = this.htmlBuyBtn;
-		if(this.checkReqUnit() * gold >= this.curGoldCost && iron >= this.curIronCost && silver >= this.curSilverCost && faith >= this.curFaithCost && souls >= this.curSoulCost && tomes >= this.curTomeCost && mana >= this.curManaCost ){     //checks that the player can afford the Unit
+		if(this.checkReqUnit() * gold >= this.curGoldCost && iron >= this.curIronCost && steel >= this.curSteelCost && silver >= this.curSilverCost && faith >= this.curFaithCost && souls >= this.curSoulCost && tomes >= this.curTomeCost && mana >= this.curManaCost ){     //checks that the player can afford the Unit
  			document.getElementById(btn).disabled = false;					//enables the buy button
 			this.CostsToBlack();
 			return true;
@@ -220,6 +231,9 @@ Unit.prototype.canBuy = function(){
 			}
 			if(iron < this.curIronCost && this.htmlNextIronCost != 'none'){
 				document.getElementById(this.htmlNextIronCost).style.color = lackResourceColor;
+			}
+			if(steel < this.curSteelCost && this.htmlNextSteelCost != 'none'){
+				document.getElementById(this.htmlNextSteelCost).style.color = lackResourceColor;
 			}
 			if(silver < this.curSilverCost && this.htmlNextSilverCost != 'none'){
 				document.getElementById(this.htmlNextSilverCost).style.color = lackResourceColor;
@@ -261,6 +275,7 @@ Unit.prototype.checkReqUnit = function(){
 Unit.prototype.CostsToBlack = function(){
 	if(this.htmlNextGoldCost != 'none'){document.getElementById(this.htmlNextGoldCost).style.color = haveResourceColor;}
 	if(this.htmlNextIronCost != 'none'){document.getElementById(this.htmlNextIronCost).style.color = haveResourceColor;}
+	if(this.htmlNextSteelCost != 'none'){document.getElementById(this.htmlNextSteelCost).style.color = haveResourceColor;}
 	if(this.htmlNextSilverCost != 'none'){document.getElementById(this.htmlNextSilverCost).style.color = haveResourceColor;}
 	if(this.htmlNextFaithCost != 'none'){document.getElementById(this.htmlNextFaithCost).style.color = haveResourceColor;}
 	if(this.htmlNextSoulCost != 'none'){document.getElementById(this.htmlNextSoulCost).style.color = haveResourceColor;}
@@ -462,14 +477,15 @@ function updateStatistic(name, value){
 	}
 }
 
-//Unit constructor  (name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNextSilverCost, htmlNextFaithCost, htmlNextSoulCost, htmlNextTomeCost, htmlBuyBtn, 
-//					goldCost, ironCost, silverCost, faithCost, soulCost, tomeCost, manaCost, costMult, description, costAdj, hasReqUnit, reqUnit, htmlReqUnit){
+//Unit constructor  (name, htmlNumRef, htmlNextGoldCost, htmlNextIronCost, htmlNextSteelCost, htmlNextSilverCost, htmlNextFaithCost, htmlNextSoulCost, htmlNextTomeCost, htmlBuyBtn, 
+//					goldCost, ironCost, steelCost, silverCost, faithCost, soulCost, tomeCost, manaCost, costMult, description, costAdj, hasReqUnit, reqUnit, htmlReqUnit){
 var peasDesc = "A lowly denizen of your realm. They are adept at farming and scrounging for gold but completely useless at fighting.";
 var Peasant = new Unit(
 /*Name*/			"Peasant",
 /*htmlNumRef*/		'peasants',
 /*htmlNextGoldCost*/'PeasantCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -479,6 +495,7 @@ var Peasant = new Unit(
 /*htmlBuyBtn10*/	'btnbuyPeasant10',
 /*goldCost*/		50,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -500,6 +517,7 @@ var Lumberjack = new Unit(
 /*htmlNumRef*/		'lumberjacks',
 /*htmlNextGoldCost*/'LumberjackCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -509,6 +527,7 @@ var Lumberjack = new Unit(
 /*htmlBuyBtn10*/	'btnbuyLumberjack10',
 /*goldCost*/		150,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -530,6 +549,7 @@ var Miner = new Unit(
 /*htmlNumRef*/		'miners',
 /*htmlNextGoldCost*/'MinerCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -539,6 +559,7 @@ var Miner = new Unit(
 /*htmlBuyBtn10*/	'btnbuyMiner10',
 /*goldCost*/		250,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -560,6 +581,7 @@ var CoalMiner = new Unit(
 /*htmlNumRef*/		'coalminers',
 /*htmlNextGoldCost*/'CoalMinerCost',
 /*htmlNextIronCost*/'CoalMinerIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'CoalMinerSilverCost',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -569,6 +591,7 @@ var CoalMiner = new Unit(
 /*htmlBuyBtn10*/	'btnbuyCoalMiner10',
 /*goldCost*/		40000,
 /*ironCost*/		20000,
+/*steelCost*/		0,
 /*silverCost*/		15000,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -589,6 +612,7 @@ var Page = new Unit(
 /*htmlNumRef*/		'personPage',
 /*htmlNextGoldCost*/'PageCost',
 /*htmlNextIronCost*/'PageIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -598,6 +622,7 @@ var Page = new Unit(
 /*htmlBuyBtn10*/	'btnBuyPage10',
 /*goldCost*/		500,
 /*ironCost*/		100,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -620,6 +645,7 @@ var Squire = new Unit(
 /*htmlNumRef*/		'squires',
 /*htmlNextGoldCost*/'SquireCost',
 /*htmlNextIronCost*/'SquireIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -629,6 +655,7 @@ var Squire = new Unit(
 /*htmlBuyBtn10*/	'btnBuySquire10',
 /*goldCost*/		1200,
 /*ironCost*/		250,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -650,6 +677,7 @@ var Knight = new Unit(
 /*htmlNumRef*/		'knights',
 /*htmlNextGoldCost*/'KnightCost',
 /*htmlNextIronCost*/'KnightIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -659,6 +687,7 @@ var Knight = new Unit(
 /*htmlBuyBtn10*/	'btnBuyKnight10',
 /*goldCost*/		3000,
 /*ironCost*/		350,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -680,6 +709,7 @@ var Paladin = new Unit(
 /*htmlNumRef*/		'paladins',
 /*htmlNextGoldCost*/'PaladinCost',
 /*htmlNextIronCost*/'PaladinIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'PaladinSilverCost',
 /*htmlNextFaithCost*/'PaladinFaithCost',
 /*htmlNextSoulCost*/'none',
@@ -689,6 +719,7 @@ var Paladin = new Unit(
 /*htmlBuyBtn10*/	'btnBuyPaladin10',
 /*goldCost*/		10000,
 /*ironCost*/		500,
+/*steelCost*/		0,
 /*silverCost*/		100,
 /*faithCost*/		50,
 /*soulCost*/		0,
@@ -731,6 +762,7 @@ var Acolyte = new Unit(
 /*htmlNumRef*/		'acolytes',
 /*htmlNextGoldCost*/'AcolyteCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -740,6 +772,7 @@ var Acolyte = new Unit(
 /*htmlBuyBtn10*/	'btnbuyAcolyte10',
 /*goldCost*/		500,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -761,6 +794,7 @@ var Priest = new Unit(
 /*htmlNumRef*/		'priests',
 /*htmlNextGoldCost*/'PriestCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'PriestSilverCost',
 /*htmlNextFaithCost*/'PriestFaithCost',
 /*htmlNextSoulCost*/'none',
@@ -770,6 +804,7 @@ var Priest = new Unit(
 /*htmlBuyBtn10*/	'btnbuyPriest10',
 /*goldCost*/		1000,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		10,
 /*faithCost*/		50,
 /*soulCost*/		0,
@@ -790,6 +825,7 @@ var Scribe = new Unit(
 /*htmlNumRef*/		'scribes',
 /*htmlNextGoldCost*/'ScribeCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'ScribeSilverCost',
 /*htmlNextFaithCost*/'ScribeFaithCost',
 /*htmlNextSoulCost*/'none',
@@ -799,6 +835,7 @@ var Scribe = new Unit(
 /*htmlBuyBtn10*/	'btnbuyScribe10',
 /*goldCost*/		75000,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		10000,
 /*faithCost*/		50000,
 /*soulCost*/		0,
@@ -821,6 +858,7 @@ var Bishop = new Unit(
 /*htmlNumRef*/		'bishops',
 /*htmlNextGoldCost*/'BishopCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'BishopSilverCost',
 /*htmlNextFaithCost*/'BishopFaithCost',
 /*htmlNextSoulCost*/'none',
@@ -830,6 +868,7 @@ var Bishop = new Unit(
 /*htmlBuyBtn10*/	'btnbuyBishop10',
 /*goldCost*/		75000,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		10000,
 /*faithCost*/		5000,
 /*soulCost*/		0,
@@ -852,6 +891,7 @@ var Shade = new Unit(
 /*htmlNumRef*/		'shades',
 /*htmlNextGoldCost*/'ShadeCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'shadeSilverCost',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'shadeSoulCost',
@@ -861,6 +901,7 @@ var Shade = new Unit(
 /*htmlBuyBtn10*/	'btnBuyShade10',
 /*goldCost*/		10000,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		250,
 /*faithCost*/		0,
 /*soulCost*/		200,
@@ -883,6 +924,7 @@ var Aspect = new Unit(
 /*htmlNumRef*/		'aspects',
 /*htmlNextGoldCost*/'AspectCost',
 /*htmlNextIronCost*/'aspectIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'aspectSilverCost',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'aspectSoulCost',
@@ -892,6 +934,7 @@ var Aspect = new Unit(
 /*htmlBuyBtn10*/	'btnBuyAspect10',
 /*goldCost*/		15000,
 /*ironCost*/		1000,
+/*steelCost*/		0,
 /*silverCost*/		500,
 /*faithCost*/		0,
 /*soulCost*/		500,
@@ -915,6 +958,7 @@ var Angel = new Unit(
 /*htmlNumRef*/		'angels',
 /*htmlNextGoldCost*/'AngelCost',
 /*htmlNextIronCost*/'angelIronCost',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'angelSilverCost',
 /*htmlNextFaithCost*/'angelFaithCost',
 /*htmlNextSoulCost*/'angelSoulCost',
@@ -924,6 +968,7 @@ var Angel = new Unit(
 /*htmlBuyBtn10*/	'btnBuyAngel10',
 /*goldCost*/		200000,
 /*ironCost*/		500,
+/*steelCost*/		0,
 /*silverCost*/		2500,
 /*faithCost*/		25000,
 /*soulCost*/		1500,
@@ -956,6 +1001,7 @@ var Sprite = new Unit(
 /*htmlNumRef*/		'sprites',
 /*htmlNextGoldCost*/'SpriteCost',
 /*htmlNextIronCost*/'none',
+/*htmlNextSteelCost*/'none',
 /*htmlNextSilverCost*/'spriteSilverCost',
 /*htmlNextFaithCost*/'spriteFaithCost',
 /*htmlNextSoulCost*/'spriteSoulCost',
@@ -965,6 +1011,7 @@ var Sprite = new Unit(
 /*htmlBuyBtn10*/	'btnBuySprite10',
 /*goldCost*/		750000,
 /*ironCost*/		0,
+/*steelCost*/		0,
 /*silverCost*/		2500,
 /*faithCost*/		50000,
 /*soulCost*/		2000,
