@@ -1210,10 +1210,11 @@ function save(key, value) {
 			}	
 
 			if(window.localStorage.length !== 0){
-				if(localStorage.gameSaveVer !== null){
-					gameSaveVer = localStorage.gameSaveVer;
+				var savedGameVersion = localStorage.getItem('gameSaveVer');
+				if(savedGameVersion !== null && savedGameVersion !== undefined){
+					gameSaveVer = savedGameVersion;
 					console.log("Save version: " + gameSaveVer);
-					if(gameSaveVer.substring(0,3) < gameVer.substring(0,3) || gameSaveVer === '' || gameSaveVer.isNan()){			//Uses major version as metric for reset
+					if(gameSaveVer.substring(0,3) < gameVer.substring(0,3) || gameSaveVer === '' || Number.isNaN(Number(gameSaveVer))){			//Uses major version as metric for reset
 						alert("The game save data you have came from a too old previous version of the game, and in order to get the best experience, a hard reset is in order. Apologies for the inconvenience!");
 							deleteCookie();
 							location.reload(true);
