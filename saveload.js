@@ -299,25 +299,29 @@
 		save("ach1BGold",ach1BGold);
 		save("ach1TGold",ach1TGold);	
 			
-		
-		var notify = $.notify({
-			icon: 'glyphicon glyphicon-floppy-disk',
-			message: '<strong>Saving</strong> Do not close this page...'},{
-			type: 'success',
-			allow_dismiss: false,
-			showProgressbar: true,
-			delay: 1500
-		});
+			
+			if(typeof $ !== 'undefined' && $.notify){
+				var notify = $.notify({
+					icon: 'glyphicon glyphicon-floppy-disk',
+					message: '<strong>Saving</strong> Do not close this page...'},{
+					type: 'success',
+					allow_dismiss: false,
+					showProgressbar: true,
+					delay: 1500
+				});
 
-		setTimeout(function() {
-			notify.update('message', '<strong>Saving</strong>  Saving your progress.');
-		}, 1000);
-
-		
-	}
-	else{
-		alert("Sorry! Your web browser does not support local saving. Please try a newer version of your browser.");
-	}
+				setTimeout(function() {
+					notify.update('message', '<strong>Saving</strong>  Saving your progress.');
+				}, 1000);
+			}
+			else{
+				console.log('Game saved successfully.');
+			}
+		}
+		catch(e){
+			console.error('Error saving game: ' + e.message);
+			alert('Error saving game. Your browser may have run out of storage space.');
+		}
 }
 	
 	function deleteCookie(){
