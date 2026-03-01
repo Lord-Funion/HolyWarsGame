@@ -12,6 +12,8 @@ const GameStorage = {
       const safeKey = STORAGE_PREFIX + key;
       const safeValue = typeof value === 'string' ? value : JSON.stringify(value);
       localStorage.setItem(safeKey, safeValue);
+      // Keep legacy key in sync so older read paths continue to work
+      localStorage.setItem(key, safeValue);
     } catch (e) {
       console.error('Storage error:', e);
     }
@@ -61,6 +63,21 @@ function parseStoredInt(value) {
 function parseStoredFloat(value) {
   var parsed = parseFloat(value);
   return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+function hydrateLegacyStorageFromPrefixed() {
+  try {
+    Object.keys(localStorage).forEach(function (storageKey) {
+      if (storageKey.indexOf(STORAGE_PREFIX) === 0) {
+        var legacyKey = storageKey.substring(STORAGE_PREFIX.length);
+        if (localStorage.getItem(legacyKey) === null) {
+          localStorage.setItem(legacyKey, localStorage.getItem(storageKey));
+        }
+      }
+    });
+  } catch (e) {
+    console.error('Storage migration error:', e);
+  }
 }
 
 	function saveCookie(){
@@ -370,8 +387,9 @@ function parseStoredFloat(value) {
 		console.log("Your cookies have been cleared.");
 	}
 	
-	function loadCookie(){
-		if(window.localStorage.length !== 0){		
+		function loadCookie(){
+			hydrateLegacyStorageFromPrefixed();
+			if(window.localStorage.length !== 0){		
 			if(localStorage.saveTime !== null){
 				saveTime = localStorage.saveTime;
 	//			console.log(Math.floor((Date.now()-saveTime)/1000));

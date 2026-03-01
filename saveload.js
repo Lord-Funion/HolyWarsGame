@@ -24,6 +24,22 @@
 		return Number.isNaN(parsed) ? 0 : parsed;
 	}
 
+	function hydrateLegacyStorageFromPrefixed(){
+		try{
+			Object.keys(localStorage).forEach(function(storageKey){
+				if(storageKey.indexOf('holywars_') === 0){
+					var legacyKey = storageKey.substring('holywars_'.length);
+					if(localStorage.getItem(legacyKey) === null){
+						localStorage.setItem(legacyKey, localStorage.getItem(storageKey));
+					}
+				}
+			});
+		}
+		catch(e){
+			console.error('Storage migration error:', e);
+		}
+	}
+
 	function saveCookie(){
 		if(typeof(Storage) === "undefined"){
 			alert("Sorry! Your web browser does not support local saving. Please try a newer version of your browser.");
@@ -340,6 +356,7 @@
 	}
 	
 	function loadCookie(){
+		hydrateLegacyStorageFromPrefixed();
 		if(window.localStorage.length !== 0){		
 			if(localStorage.saveTime !== null){
 				saveTime = localStorage.saveTime;
