@@ -12,6 +12,8 @@ const GameStorage = {
       const safeKey = STORAGE_PREFIX + key;
       const safeValue = typeof value === 'string' ? value : JSON.stringify(value);
       localStorage.setItem(safeKey, safeValue);
+      // Keep legacy key in sync so older read paths continue to work
+      localStorage.setItem(key, safeValue);
     } catch (e) {
       console.error('Storage error:', e);
     }
@@ -50,6 +52,31 @@ function save(key, value) {
     GameStorage.set(key, 0);
   } else {
     GameStorage.set(key, value);
+  }
+}
+
+function parseStoredInt(value) {
+  var parsed = parseInt(value, 10);
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+function parseStoredFloat(value) {
+  var parsed = parseFloat(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+function hydrateLegacyStorageFromPrefixed() {
+  try {
+    Object.keys(localStorage).forEach(function (storageKey) {
+      if (storageKey.indexOf(STORAGE_PREFIX) === 0) {
+        var legacyKey = storageKey.substring(STORAGE_PREFIX.length);
+        if (localStorage.getItem(legacyKey) === null) {
+          localStorage.setItem(legacyKey, localStorage.getItem(storageKey));
+        }
+      }
+    });
+  } catch (e) {
+    console.error('Storage migration error:', e);
   }
 }
 
@@ -360,101 +387,102 @@ function save(key, value) {
 		console.log("Your cookies have been cleared.");
 	}
 	
-	function loadCookie(){
-		if(window.localStorage.length !== 0){		
+		function loadCookie(){
+			hydrateLegacyStorageFromPrefixed();
+			if(window.localStorage.length !== 0){		
 			if(localStorage.saveTime !== null){
 				saveTime = localStorage.saveTime;
 	//			console.log(Math.floor((Date.now()-saveTime)/1000));
 			}	
 			
 			if(localStorage.gold !== null){
-				gold = parseInt(localStorage.gold);
+				gold = parseStoredInt(localStorage.gold);
 				document.getElementById("gold").innerHTML = fnum(gold);
 			}
 			
 			if(localStorage.goldStolen !== null){
-				goldStolen = parseInt(localStorage.goldStolen);
+				goldStolen = parseStoredInt(localStorage.goldStolen);
 				document.getElementById("goldStolen").innerHTML = goldStolen;
 			}
 			
 			if(localStorage.wood !== null){
-				wood = parseInt(localStorage.wood);
+				wood = parseStoredInt(localStorage.wood);
 				document.getElementById("wood").innerHTML = fnum(wood);
 			}	
 
 			if(localStorage.paper !== null){
-				paper = parseInt(localStorage.paper);
+				paper = parseStoredInt(localStorage.paper);
 				document.getElementById("paper").innerHTML = fnum(paper);
 			}			
 			
 			if(localStorage.iron !== null){
-				iron = parseInt(localStorage.iron);
+				iron = parseStoredInt(localStorage.iron);
 				document.getElementById("iron").innerHTML = fnum(iron);
 			}
 			
 			if(localStorage.coal !== null){
-				coal = parseInt(localStorage.coal);
+				coal = parseStoredInt(localStorage.coal);
 				document.getElementById("coal").innerHTML = fnum(coal);
 			}	
 
 			if(localStorage.steel !== null){
-				steel = parseInt(localStorage.steel);
+				steel = parseStoredInt(localStorage.steel);
 				document.getElementById("steel").innerHTML = fnum(steel);
 			}				
 
 			if(localStorage.silver !== null){
-				silver = parseInt(localStorage.silver);
+				silver = parseStoredInt(localStorage.silver);
 				document.getElementById("silver").innerHTML = fnum(silver);
 			}		
 			
 			if(localStorage.faith !== null){
-				faith = parseInt(localStorage.faith);
+				faith = parseStoredInt(localStorage.faith);
 				document.getElementById("faith").innerHTML = fnum(faith);
 			}			
 			if(localStorage.souls !== null){
-				souls = parseInt(localStorage.souls);
+				souls = parseStoredInt(localStorage.souls);
 				document.getElementById("souls").innerHTML = fnum(souls);
 			}		
 			if(localStorage.tomes !== null){
-				tomes = parseInt(localStorage.tomes);
+				tomes = parseStoredInt(localStorage.tomes);
 				document.getElementById("tomes").innerHTML = fnum(tomes);
 			}	
 			if(localStorage.mana !== null){
-				mana = parseInt(localStorage.mana);
+				mana = parseStoredInt(localStorage.mana);
 				document.getElementById("mana").innerHTML = fnum(mana);
 			}		
 			if(localStorage.totalTimePlayed !== null){
-				totalTimePlayed = parseInt(localStorage.totalTimePlayed);
+				totalTimePlayed = parseStoredInt(localStorage.totalTimePlayed);
 			}
 			
 			if(localStorage.peasants !== null){
-				Peasant.number = parseInt(localStorage.peasants);
+				Peasant.number = parseStoredInt(localStorage.peasants);
 				document.getElementById("peasants").innerHTML = Peasant.number;
 			}
 			if(localStorage.lumberjacks !== null){
-				Lumberjack.number = parseInt(localStorage.lumberjacks);
+				Lumberjack.number = parseStoredInt(localStorage.lumberjacks);
 				document.getElementById("lumberjacks").innerHTML = Lumberjack.number;
 			}			
 			if(localStorage.miners !== null){
-				Miner.number = parseInt(localStorage.miners);
+				Miner.number = parseStoredInt(localStorage.miners);
 				document.getElementById("miners").innerHTML = Miner.number;
 			}
 			
 			if(localStorage.coalminers !== null){
-				CoalMiner.number = parseInt(localStorage.coalminers);
+				CoalMiner.number = parseStoredInt(localStorage.coalminers);
 				document.getElementById("coalminers").innerHTML = CoalMiner.number;
 			}		
 			
 			if(localStorage.personPage !== null){
-				Page.number = parseInt(localStorage.personPage);
+				Page.number = parseStoredInt(localStorage.personPage);
 				document.getElementById("personPage").innerHTML = Page.number;
 			}
 			if(localStorage.squires !== null){
-				Squire.number = parseInt(localStorage.squires);
+				Squire.number = parseStoredInt(localStorage.squires);
 				document.getElementById("squires").innerHTML = Squire.number;
 			}
 			if(localStorage.knights !== null){
-				Knight.number = parseInt(localStorage.knights);
+				Knight.number = parseStoredInt(localStorage.knights);
 				document.getElementById("knights").innerHTML = Knight.number;
 			}
 			if(localStorage.lumbermillOpened !== null){
@@ -478,42 +506,42 @@ function save(key, value) {
 			}		
 
 			if(localStorage.tavernpeasants !== null){
-				tavernpeasants = parseInt(localStorage.tavernpeasants);
+				tavernpeasants = parseStoredInt(localStorage.tavernpeasants);
 				Peasant.number = Peasant.number + tavernpeasants;
 				document.getElementById("tavernpeasants").innerHTML = tavernpeasants;
 				document.getElementById("peasants").innerHTML = Peasant.number;
 			}		
 
 			if(localStorage.tavernminers !== null){
-				tavernminers = parseInt(localStorage.tavernminers);
+				tavernminers = parseStoredInt(localStorage.tavernminers);
 				Miner.number = Miner.number + tavernminers;
 				document.getElementById("tavernminers").innerHTML = tavernminers;
 				document.getElementById("miners").innerHTML = Miner.number;
 			}			
 			if(localStorage.tavernlumberjacks !== null){
-				tavernlumberjacks = parseInt(localStorage.tavernlumberjacks);
+				tavernlumberjacks = parseStoredInt(localStorage.tavernlumberjacks);
 				Lumberjack.number = Lumberjack.number + tavernlumberjacks;
 				document.getElementById("tavernlumberjacks").innerHTML = tavernlumberjacks;
 				document.getElementById("lumberjacks").innerHTML = Lumberjack.number;
 			}		
 			if(localStorage.taverns !== null){
-				Tavern.number = parseInt(localStorage.taverns);
+				Tavern.number = parseStoredInt(localStorage.taverns);
 				document.getElementById("taverns").innerHTML = Tavern.number;
 			}
 			
 			if(localStorage.papermills !== null){
-				PaperMill.number = parseInt(localStorage.papermills);
+				PaperMill.number = parseStoredInt(localStorage.papermills);
 				document.getElementById("papermills").innerHTML = PaperMill.number;
 				if(localStorage.papermillstatus !== null){
 					PaperMill.status = localStorage.papermillstatus;
 				}
 				if(localStorage.papermillnumon !== null){
-					PaperMill.numberOn = parseInt(localStorage.papermillnumon);
+					PaperMill.numberOn = parseStoredInt(localStorage.papermillnumon);
 				}
 			}
 			
 			if(localStorage.arcanelibrary !== null){
-				ArcaneLibrary.number = parseInt(localStorage.arcanelibrary);
+				ArcaneLibrary.number = parseStoredInt(localStorage.arcanelibrary);
 				document.getElementById("ArcaneLibrary").innerHTML = ArcaneLibrary.number;
 			}		
 			
@@ -600,47 +628,47 @@ function save(key, value) {
 				}
 			}			
 			if(localStorage.acolytes !== null){
-				 Acolyte.number = parseInt(localStorage.acolytes);
+				 Acolyte.number = parseStoredInt(localStorage.acolytes);
 				document.getElementById("acolytes").innerHTML = Acolyte.number;
 			}			
 			
 			if(localStorage.priests !== null){
-				 Priest.number = parseInt(localStorage.priests);
+				 Priest.number = parseStoredInt(localStorage.priests);
 				document.getElementById("priests").innerHTML = Priest.number;
 			}
 
 			if(localStorage.scribes !== null){
-				 Scribe.number = parseInt(localStorage.scribes);
+				 Scribe.number = parseStoredInt(localStorage.scribes);
 				document.getElementById("scribes").innerHTML = Scribe.number;
 			}		
 
 			if(localStorage.bishops !== null){
-				 Bishop.number = parseInt(localStorage.bishops);
+				 Bishop.number = parseStoredInt(localStorage.bishops);
 				document.getElementById("bishops").innerHTML = Bishop.number;
 			}			
 			
 			if(localStorage.paladins !== null){
-				Paladin.number = parseInt(localStorage.paladins);
+				Paladin.number = parseStoredInt(localStorage.paladins);
 				document.getElementById("paladins").innerHTML = Paladin.number;
 			}
 
 			if(localStorage.shades !== null){
-				Shade.number = parseInt(localStorage.shades);
+				Shade.number = parseStoredInt(localStorage.shades);
 				document.getElementById("shades").innerHTML = Shade.number;
 			}
 
 			if(localStorage.aspects !== null){
-				Aspect.number = parseInt(localStorage.aspects);
+				Aspect.number = parseStoredInt(localStorage.aspects);
 				document.getElementById("aspects").innerHTML = Aspect.number;
 			}
 
 			if(localStorage.angels !== null){
-				Angel.number = parseInt(localStorage.angels);
+				Angel.number = parseStoredInt(localStorage.angels);
 				document.getElementById("angels").innerHTML = Angel.number;
 			}
 
 			if(localStorage.sprites !== null){
-				Sprite.number = parseInt(localStorage.sprites);
+				Sprite.number = parseStoredInt(localStorage.sprites);
 				document.getElementById("sprites").innerHTML = Sprite.number;
 			}		
 			
@@ -999,7 +1027,7 @@ function save(key, value) {
 			}
 			
 			if(localStorage.UARevivedCount !== null){
-				UARevivedCount = parseInt(localStorage.UARevivedCount);
+				UARevivedCount = parseStoredInt(localStorage.UARevivedCount);
 				if(UARevivedCount < 3){
 					setTimeout(function() { necroReviveUA(); }, 20000);
 				}
@@ -1100,17 +1128,17 @@ function save(key, value) {
 			}	
 			
 			if(localStorage.peasantsKilled !== null){
-				peasantsKilled = parseInt(localStorage.peasantsKilled);
+				peasantsKilled = parseStoredInt(localStorage.peasantsKilled);
 				document.getElementById("peasantsKilled").innerHTML = peasantsKilled;
 			}			
 
 			if(localStorage.minersKilled !== null){
-				minersKilled = parseInt(localStorage.minersKilled);
+				minersKilled = parseStoredInt(localStorage.minersKilled);
 				document.getElementById("minersKilled").innerHTML = minersKilled;
 			}	
 			
 			if(localStorage.ironAbsorbed !== null){
-				ironAbsorbed = parseInt(localStorage.ironAbsorbed);
+				ironAbsorbed = parseStoredInt(localStorage.ironAbsorbed);
 				document.getElementById("ironAbsorbed").innerHTML = fnum(ironAbsorbed);
 				if(ironAbsorbed > 0 ){
 					document.getElementById('BatOoze').style.display = "block";
@@ -1118,14 +1146,14 @@ function save(key, value) {
 			}	
 			
 			if(localStorage.silverAbsorbed !== null){
-				silverAbsorbed = parseInt(localStorage.silverAbsorbed);
+				silverAbsorbed = parseStoredInt(localStorage.silverAbsorbed);
 				document.getElementById("silverAbsorbed").innerHTML = fnum(silverAbsorbed);
 				if(silverAbsorbed > 0 ){
 					document.getElementById('BatOoze').style.display = "block";
 				}
 			}			
 			if(localStorage.unitsSeduced !== null){
-				unitsSeduced = parseInt(localStorage.unitsSeduced);
+				unitsSeduced = parseStoredInt(localStorage.unitsSeduced);
 				document.getElementById("unitsSeduced").innerHTML = fnum(unitsSeduced);
 			}		
 			
@@ -1147,8 +1175,8 @@ function save(key, value) {
 					curQuestType = localStorage.curQuestType;
 					questPercent = localStorage.questPercent;
 					UnitOnQuest = localStorage.UnitOnQuest;	
-					NumUnitOnQuest = parseInt(localStorage.NumUnitOnQuest);
-					QuestDuration = parseInt(localStorage.QuestDuration);
+					NumUnitOnQuest = parseStoredInt(localStorage.NumUnitOnQuest);
+					QuestDuration = parseStoredInt(localStorage.QuestDuration);
 	//				eval('UnitOnQuest.onQuest = NumUnitOnQuest');
 					loadedQuest = true;
 					console.log(curQuestType + ": " + questPercent + "%" + UnitOnQuest + " " + NumUnitOnQuest);
@@ -1157,7 +1185,7 @@ function save(key, value) {
 			}
 			
 			if(localStorage.relicFragment !== null){
-				relicFragment = parseInt(localStorage.relicFragment);
+				relicFragment = parseStoredInt(localStorage.relicFragment);
 				document.getElementById('relicBadge').innerHTML = relicFragment;
 				document.getElementById('relicFragments').innerHTML = relicFragment;
 			}	
@@ -1195,7 +1223,7 @@ function save(key, value) {
 			}
 			
 			if(localStorage.faithDonated !== null){
-				faithDonated = parseInt(localStorage.faithDonated);
+				faithDonated = parseStoredInt(localStorage.faithDonated);
 				document.getElementById("faithDonated").innerHTML = fnum(faithDonated);
 				if(faithDonated >= 500000){
 					document.getElementById('RelicPedestalTab').style.display = "none";
@@ -1210,10 +1238,11 @@ function save(key, value) {
 			}	
 
 			if(window.localStorage.length !== 0){
-				if(localStorage.gameSaveVer !== null){
-					gameSaveVer = localStorage.gameSaveVer;
+				var savedGameVersion = localStorage.getItem('gameSaveVer');
+				if(savedGameVersion !== null && savedGameVersion !== undefined){
+					gameSaveVer = savedGameVersion;
 					console.log("Save version: " + gameSaveVer);
-					if(gameSaveVer.substring(0,3) < gameVer.substring(0,3) || gameSaveVer === '' || gameSaveVer.isNan()){			//Uses major version as metric for reset
+					if(gameSaveVer.substring(0,3) < gameVer.substring(0,3) || gameSaveVer === '' || Number.isNaN(Number(gameSaveVer))){			//Uses major version as metric for reset
 						alert("The game save data you have came from a too old previous version of the game, and in order to get the best experience, a hard reset is in order. Apologies for the inconvenience!");
 							deleteCookie();
 							location.reload(true);
@@ -1246,383 +1275,383 @@ function save(key, value) {
 				//Clicking Stats
 				
 			if(localStorage.timesClicked !== null){
-				timesClicked = parseInt(localStorage.timesClicked);
+				timesClicked = parseStoredInt(localStorage.timesClicked);
 				document.getElementById('statTimesClicked').innerHTML = fnum(timesClicked);
 			}		
 				//Gold Stats
 			if(localStorage.statGoldCollected !== null){
-				statGoldCollected = parseInt(localStorage.statGoldCollected);
+				statGoldCollected = parseStoredInt(localStorage.statGoldCollected);
 				document.getElementById('statgoldcollected').innerHTML = fnum(statGoldCollected);
 			}
 			
 			if(localStorage.statTotalGoldCollected !== null){
-				statTotalGoldCollected = parseInt(localStorage.statTotalGoldCollected);
+				statTotalGoldCollected = parseStoredInt(localStorage.statTotalGoldCollected);
 				document.getElementById('stattotalgoldcollected').innerHTML = fnum(statTotalGoldCollected);
 			}
 
 			if(localStorage.statSelfGoldCollected !== null){
-				statSelfGoldCollected = parseInt(localStorage.statSelfGoldCollected);
+				statSelfGoldCollected = parseStoredInt(localStorage.statSelfGoldCollected);
 				document.getElementById('statselfgoldcollected').innerHTML = fnum(statSelfGoldCollected);
 			}
 
 			if(localStorage.statTotalSelfGoldCollected !== null){
-				statTotalSelfGoldCollected = parseInt(localStorage.statTotalSelfGoldCollected);
+				statTotalSelfGoldCollected = parseStoredInt(localStorage.statTotalSelfGoldCollected);
 				document.getElementById('stattotalselfgoldcollected').innerHTML = fnum(statTotalSelfGoldCollected);
 			}			
 			
 				//Wood Stats
 			if(localStorage.statWoodCollected !== null){
-				statWoodCollected = parseInt(localStorage.statWoodCollected);
+				statWoodCollected = parseStoredInt(localStorage.statWoodCollected);
 				document.getElementById('statWoodCollected').innerHTML = fnum(statWoodCollected);
 			}
 			
 			if(localStorage.statTotalWoodCollected !== null){
-				statTotalWoodCollected = parseInt(localStorage.statTotalWoodCollected);
+				statTotalWoodCollected = parseStoredInt(localStorage.statTotalWoodCollected);
 				document.getElementById('statTotalWoodCollected').innerHTML = fnum(statTotalWoodCollected);
 			}
 
 			if(localStorage.statSelfWoodCollected !== null){
-				statSelfWoodCollected = parseInt(localStorage.statSelfWoodCollected);
+				statSelfWoodCollected = parseStoredInt(localStorage.statSelfWoodCollected);
 				document.getElementById('statSelfWoodCollected').innerHTML = fnum(statSelfWoodCollected);
 			}
 
 			if(localStorage.statTotalSelfWoodCollected !== null){
-				statTotalSelfWoodCollected = parseInt(localStorage.statTotalSelfWoodCollected);
+				statTotalSelfWoodCollected = parseStoredInt(localStorage.statTotalSelfWoodCollected);
 				document.getElementById('statTotalSelfWoodCollected').innerHTML = fnum(statTotalSelfWoodCollected);
 			}	
 
 				//Iron
 			if(localStorage.statIronCollected !== null){
-				statIronCollected = parseInt(localStorage.statIronCollected);
+				statIronCollected = parseStoredInt(localStorage.statIronCollected);
 				document.getElementById('statIronCollected').innerHTML = fnum(statIronCollected);
 			}
 
 			if(localStorage.statTotalIronCollected !== null){
-				statTotalIronCollected = parseInt(localStorage.statTotalIronCollected);
+				statTotalIronCollected = parseStoredInt(localStorage.statTotalIronCollected);
 				document.getElementById('statTotalIronCollected').innerHTML = fnum(statTotalIronCollected);
 			}			
 			
 				//Silver
 			if(localStorage.statSilverCollected !== null){
-				statSilverCollected = parseInt(localStorage.statSilverCollected);
+				statSilverCollected = parseStoredInt(localStorage.statSilverCollected);
 				document.getElementById('statSilverCollected').innerHTML = fnum(statSilverCollected);
 			}
 
 			if(localStorage.statTotalSilverCollected !== null){
-				statTotalSilverCollected = parseInt(localStorage.statTotalSilverCollected);
+				statTotalSilverCollected = parseStoredInt(localStorage.statTotalSilverCollected);
 				document.getElementById('statTotalSilverCollected').innerHTML = fnum(statTotalSilverCollected);
 			}			
 			
 				//Paper
 			if(localStorage.statPaperCrafted !== null){
-				statPaperCrafted = parseInt(localStorage.statPaperCrafted);
+				statPaperCrafted = parseStoredInt(localStorage.statPaperCrafted);
 				document.getElementById('statPaperCrafted').innerHTML = fnum(statPaperCrafted);
 			}
 			
 			if(localStorage.statTotalPaperCrafted !== null){
-				statTotalPaperCrafted = parseInt(localStorage.statTotalPaperCrafted);
+				statTotalPaperCrafted = parseStoredInt(localStorage.statTotalPaperCrafted);
 				document.getElementById('statTotalPaperCrafted').innerHTML = fnum(statTotalPaperCrafted);
 			}
 
 			if(localStorage.statSelfPaperCrafted !== null){
-				statSelfPaperCrafted = parseInt(localStorage.statSelfPaperCrafted);
+				statSelfPaperCrafted = parseStoredInt(localStorage.statSelfPaperCrafted);
 				document.getElementById('statSelfPaperCrafted').innerHTML = fnum(statSelfPaperCrafted);
 			}
 
 			if(localStorage.statTotalSelfPaperCrafted !== null){
-				statTotalSelfPaperCrafted = parseInt(localStorage.statTotalSelfPaperCrafted);
+				statTotalSelfPaperCrafted = parseStoredInt(localStorage.statTotalSelfPaperCrafted);
 				document.getElementById('statTotalSelfPaperCrafted').innerHTML = fnum(statTotalSelfPaperCrafted);
 			}			
 			
 				//Faith
 			if(localStorage.statFaithCollected !== null){
-				statFaithCollected = parseInt(localStorage.statFaithCollected);
+				statFaithCollected = parseStoredInt(localStorage.statFaithCollected);
 				document.getElementById('statFaithCollected').innerHTML = fnum(statFaithCollected);
 			}
 
 			if(localStorage.statTotalFaithCollected !== null){
-				statTotalFaithCollected = parseInt(localStorage.statTotalFaithCollected);
+				statTotalFaithCollected = parseStoredInt(localStorage.statTotalFaithCollected);
 				document.getElementById('statTotalFaithCollected').innerHTML = fnum(statTotalFaithCollected);
 			}
 			
 				//Souls
 				
 			if(localStorage.statSoulsCollected !== null){
-				statSoulsCollected = parseInt(localStorage.statSoulsCollected);
+				statSoulsCollected = parseStoredInt(localStorage.statSoulsCollected);
 				document.getElementById('statSoulsCollected').innerHTML = fnum(statSoulsCollected);
 			}
 
 			if(localStorage.statTotalSoulsCollected !== null){
-				statTotalSoulsCollected = parseInt(localStorage.statTotalSoulsCollected);
+				statTotalSoulsCollected = parseStoredInt(localStorage.statTotalSoulsCollected);
 				document.getElementById('statTotalSoulsCollected').innerHTML = fnum(statTotalSoulsCollected);
 			}			
 			
 				//Peasants
 			if(localStorage.statPeasantsHired !== null){
-				statPeasantsHired = parseInt(localStorage.statPeasantsHired);
+				statPeasantsHired = parseStoredInt(localStorage.statPeasantsHired);
 				document.getElementById('statPeasantsHired').innerHTML = fnum(statPeasantsHired);
 			}
 			if(localStorage.statSelfPeasantsHired !== null){
-				statSelfPeasantsHired = parseInt(localStorage.statSelfPeasantsHired);
+				statSelfPeasantsHired = parseStoredInt(localStorage.statSelfPeasantsHired);
 				document.getElementById('statSelfPeasantsHired').innerHTML = fnum(statSelfPeasantsHired);
 			}
 			if(localStorage.statTotalSelfPeasantsHired !== null){
-				statTotalSelfPeasantsHired = parseInt(localStorage.statTotalSelfPeasantsHired);
+				statTotalSelfPeasantsHired = parseStoredInt(localStorage.statTotalSelfPeasantsHired);
 				document.getElementById('statTotalSelfPeasantsHired').innerHTML = fnum(statTotalSelfPeasantsHired);
 			}	
 			if(localStorage.statTavernPeasantsHired !== null){
-				statTavernPeasantsHired = parseInt(localStorage.statTavernPeasantsHired);
+				statTavernPeasantsHired = parseStoredInt(localStorage.statTavernPeasantsHired);
 				document.getElementById('statTavernPeasantsHired').innerHTML = fnum(statTavernPeasantsHired);
 			}	
 			if(localStorage.statTotalTavernPeasantsHired !== null){
-				statTotalTavernPeasantsHired = parseInt(localStorage.statTotalTavernPeasantsHired);
+				statTotalTavernPeasantsHired = parseStoredInt(localStorage.statTotalTavernPeasantsHired);
 				document.getElementById('statTotalTavernPeasantsHired').innerHTML = fnum(statTotalTavernPeasantsHired);
 			}
 			if(localStorage.statTotalPeasantsHired !== null){
-				statTotalPeasantsHired = parseInt(localStorage.statTotalPeasantsHired);
+				statTotalPeasantsHired = parseStoredInt(localStorage.statTotalPeasantsHired);
 				document.getElementById('statTotalPeasantsHired').innerHTML = fnum(statTotalPeasantsHired);
 			}				
 			
 				//Miners
 			if(localStorage.statMinersHired !== null){
-				statMinersHired = parseInt(localStorage.statMinersHired);
+				statMinersHired = parseStoredInt(localStorage.statMinersHired);
 				document.getElementById('statMinersHired').innerHTML = fnum(statMinersHired);
 			}
 			if(localStorage.statSelfMinersHired !== null){
-				statSelfMinersHired = parseInt(localStorage.statSelfMinersHired);
+				statSelfMinersHired = parseStoredInt(localStorage.statSelfMinersHired);
 				document.getElementById('statSelfMinersHired').innerHTML = fnum(statSelfMinersHired);
 			}
 			if(localStorage.statTotalSelfMinersHired !== null){
-				statTotalSelfMinersHired = parseInt(localStorage.statTotalSelfMinersHired);
+				statTotalSelfMinersHired = parseStoredInt(localStorage.statTotalSelfMinersHired);
 				document.getElementById('statTotalSelfMinersHired').innerHTML = fnum(statTotalSelfMinersHired);
 			}	
 			if(localStorage.statTavernMinersHired !== null){
-				statTavernMinersHired = parseInt(localStorage.statTavernMinersHired);
+				statTavernMinersHired = parseStoredInt(localStorage.statTavernMinersHired);
 				document.getElementById('statTavernMinersHired').innerHTML = fnum(statTavernMinersHired);
 			}	
 			if(localStorage.statTotalTavernMinersHired !== null){
-				statTotalTavernMinersHired = parseInt(localStorage.statTotalTavernMinersHired);
+				statTotalTavernMinersHired = parseStoredInt(localStorage.statTotalTavernMinersHired);
 				document.getElementById('statTotalTavernMinersHired').innerHTML = fnum(statTotalTavernMinersHired);
 			}
 			if(localStorage.statTotalMinersHired !== null){
-				statTotalMinersHired = parseInt(localStorage.statTotalMinersHired);
+				statTotalMinersHired = parseStoredInt(localStorage.statTotalMinersHired);
 				document.getElementById('statTotalMinersHired').innerHTML = fnum(statTotalMinersHired);
 			}
 				//Coal Miners
 				
 			if(localStorage.statCoalMinersHired !== null){
-				statCoalMinersHired = parseInt(localStorage.statCoalMinersHired);
+				statCoalMinersHired = parseStoredInt(localStorage.statCoalMinersHired);
 				document.getElementById('statCoalMinersHired').innerHTML = fnum(statCoalMinersHired);
 			}
 			if(localStorage.statTotalCoalMinersHired !== null){
-				statTotalCoalMinersHired = parseInt(localStorage.statTotalCoalMinersHired);
+				statTotalCoalMinersHired = parseStoredInt(localStorage.statTotalCoalMinersHired);
 				document.getElementById('statTotalCoalMinersHired').innerHTML = fnum(statTotalCoalMinersHired);
 			}		
 			
 				//Lumberjacks
 			if(localStorage.statLumberjacksHired !== null){
-				statLumberjacksHired = parseInt(localStorage.statLumberjacksHired);
+				statLumberjacksHired = parseStoredInt(localStorage.statLumberjacksHired);
 				document.getElementById('statLumberjacksHired').innerHTML = fnum(statLumberjacksHired);
 			}
 			if(localStorage.statSelfLumberjacksHired !== null){
-				statSelfLumberjacksHired = parseInt(localStorage.statSelfLumberjacksHired);
+				statSelfLumberjacksHired = parseStoredInt(localStorage.statSelfLumberjacksHired);
 				document.getElementById('statSelfLumberjacksHired').innerHTML = fnum(statSelfLumberjacksHired);
 			}
 			if(localStorage.statTotalSelfLumberjacksHired !== null){
-				statTotalSelfLumberjacksHired = parseInt(localStorage.statTotalSelfLumberjacksHired);
+				statTotalSelfLumberjacksHired = parseStoredInt(localStorage.statTotalSelfLumberjacksHired);
 				document.getElementById('statTotalSelfLumberjacksHired').innerHTML = fnum(statTotalSelfLumberjacksHired);
 			}	
 			if(localStorage.statTavernLumberjacksHired !== null){
-				statTavernLumberjacksHired = parseInt(localStorage.statTavernLumberjacksHired);
+				statTavernLumberjacksHired = parseStoredInt(localStorage.statTavernLumberjacksHired);
 				document.getElementById('statTavernLumberjacksHired').innerHTML = fnum(statTavernLumberjacksHired);
 			}	
 			if(localStorage.statTotalTavernLumberjacksHired !== null){
-				statTotalTavernLumberjacksHired = parseInt(localStorage.statTotalTavernLumberjacksHired);
+				statTotalTavernLumberjacksHired = parseStoredInt(localStorage.statTotalTavernLumberjacksHired);
 				document.getElementById('statTotalTavernLumberjacksHired').innerHTML = fnum(statTotalTavernLumberjacksHired);
 			}
 			if(localStorage.statTotalLumberjacksHired !== null){
-				statTotalLumberjacksHired = parseInt(localStorage.statTotalLumberjacksHired);
+				statTotalLumberjacksHired = parseStoredInt(localStorage.statTotalLumberjacksHired);
 				document.getElementById('statTotalLumberjacksHired').innerHTML = fnum(statTotalLumberjacksHired);
 			}			
 			
 				//Pages
 			if(localStorage.statPagesTrained !== null){
-				statPagesTrained = parseInt(localStorage.statPagesTrained);
+				statPagesTrained = parseStoredInt(localStorage.statPagesTrained);
 				document.getElementById('statPagesTrained').innerHTML = fnum(statPagesTrained);
 			}
 			if(localStorage.statTotalPagesTrained !== null){
-				statTotalPagesTrained = parseInt(localStorage.statTotalPagesTrained);
+				statTotalPagesTrained = parseStoredInt(localStorage.statTotalPagesTrained);
 				document.getElementById('statTotalPagesTrained').innerHTML = fnum(statTotalPagesTrained);
 			}
 			
 				//Squires
 			if(localStorage.statSquiresTrained !== null){
-				statSquiresTrained = parseInt(localStorage.statSquiresTrained);
+				statSquiresTrained = parseStoredInt(localStorage.statSquiresTrained);
 				document.getElementById('statSquiresTrained').innerHTML = fnum(statSquiresTrained);
 			}
 			if(localStorage.statTotalSquiresTrained !== null){
-				statTotalSquiresTrained = parseInt(localStorage.statTotalSquiresTrained);
+				statTotalSquiresTrained = parseStoredInt(localStorage.statTotalSquiresTrained);
 				document.getElementById('statTotalSquiresTrained').innerHTML = fnum(statTotalSquiresTrained);
 			}
 			
 				//Knights
 			if(localStorage.statKnightsTrained !== null){
-				statKnightsTrained = parseInt(localStorage.statKnightsTrained);
+				statKnightsTrained = parseStoredInt(localStorage.statKnightsTrained);
 				document.getElementById('statKnightsTrained').innerHTML = fnum(statKnightsTrained);
 			}
 			if(localStorage.statTotalKnightsTrained !== null){
-				statTotalKnightsTrained = parseInt(localStorage.statTotalKnightsTrained);
+				statTotalKnightsTrained = parseStoredInt(localStorage.statTotalKnightsTrained);
 				document.getElementById('statTotalKnightsTrained').innerHTML = fnum(statTotalKnightsTrained);
 			}
 			
 				//Paladins
 			if(localStorage.statPaladinsTrained !== null){
-				statPaladinsTrained = parseInt(localStorage.statPaladinsTrained);
+				statPaladinsTrained = parseStoredInt(localStorage.statPaladinsTrained);
 				document.getElementById('statPaladinsTrained').innerHTML = fnum(statPaladinsTrained);
 			}
 			if(localStorage.statTotalPaladinsTrained !== null){
-				statTotalPaladinsTrained = parseInt(localStorage.statTotalPaladinsTrained);
+				statTotalPaladinsTrained = parseStoredInt(localStorage.statTotalPaladinsTrained);
 				document.getElementById('statTotalPaladinsTrained').innerHTML = fnum(statTotalPaladinsTrained);
 			}
 			
 				//Acolytes
 			if(localStorage.statAcolytesRecruited !== null){
-				statAcolytesRecruited = parseInt(localStorage.statAcolytesRecruited);
+				statAcolytesRecruited = parseStoredInt(localStorage.statAcolytesRecruited);
 				document.getElementById('statAcolytesRecruited').innerHTML = fnum(statAcolytesRecruited);
 			}
 			if(localStorage.statTotalAcolytesRecruited !== null){
-				statTotalAcolytesRecruited = parseInt(localStorage.statTotalAcolytesRecruited);
+				statTotalAcolytesRecruited = parseStoredInt(localStorage.statTotalAcolytesRecruited);
 				document.getElementById('statTotalAcolytesRecruited').innerHTML = fnum(statTotalAcolytesRecruited);
 			}
 
 				//Priests
 			if(localStorage.statPriestsTrained !== null){
-				statPriestsTrained = parseInt(localStorage.statPriestsTrained);
+				statPriestsTrained = parseStoredInt(localStorage.statPriestsTrained);
 				document.getElementById('statPriestsTrained').innerHTML = fnum(statPriestsTrained);
 			}
 			if(localStorage.statTotalPriestsTrained !== null){
-				statTotalPriestsTrained = parseInt(localStorage.statTotalPriestsTrained);
+				statTotalPriestsTrained = parseStoredInt(localStorage.statTotalPriestsTrained);
 				document.getElementById('statTotalPriestsTrained').innerHTML = fnum(statTotalPriestsTrained);
 			}
 
 				//Bishops
 			if(localStorage.statBishopsTrained !== null){
-				statBishopsTrained = parseInt(localStorage.statBishopsTrained);
+				statBishopsTrained = parseStoredInt(localStorage.statBishopsTrained);
 				document.getElementById('statBishopsTrained').innerHTML = fnum(statBishopsTrained);
 			}
 			if(localStorage.statTotalBishopsTrained !== null){
-				statTotalBishopsTrained = parseInt(localStorage.statTotalBishopsTrained);
+				statTotalBishopsTrained = parseStoredInt(localStorage.statTotalBishopsTrained);
 				document.getElementById('statTotalBishopsTrained').innerHTML = fnum(statTotalBishopsTrained);
 			}		
 				
 				//Shades
 			if(localStorage.statShadesSummoned !== null){
-				statShadesSummoned = parseInt(localStorage.statShadesSummoned);
+				statShadesSummoned = parseStoredInt(localStorage.statShadesSummoned);
 				document.getElementById('statShadesSummoned').innerHTML = fnum(statShadesSummoned);
 			}
 			if(localStorage.statTotalShadesSummoned !== null){
-				statTotalShadesSummoned = parseInt(localStorage.statTotalShadesSummoned);
+				statTotalShadesSummoned = parseStoredInt(localStorage.statTotalShadesSummoned);
 				document.getElementById('statTotalShadesSummoned').innerHTML = fnum(statTotalShadesSummoned);
 			}
 
 				//Aspects
 			if(localStorage.statAspectsTrained !== null){
-				statAspectsTrained = parseInt(localStorage.statAspectsTrained);
+				statAspectsTrained = parseStoredInt(localStorage.statAspectsTrained);
 				document.getElementById('statAspectsTrained').innerHTML = fnum(statAspectsTrained);
 			}
 			if(localStorage.statTotalAspectsTrained !== null){
-				statTotalAspectsTrained = parseInt(localStorage.statTotalAspectsTrained);
+				statTotalAspectsTrained = parseStoredInt(localStorage.statTotalAspectsTrained);
 				document.getElementById('statTotalAspectsTrained').innerHTML = fnum(statTotalAspectsTrained);
 			}
 				
 				//Angels
 			if(localStorage.statAngelsSummoned !== null){
-				statAngelsSummoned = parseInt(localStorage.statAngelsSummoned);
+				statAngelsSummoned = parseStoredInt(localStorage.statAngelsSummoned);
 				document.getElementById('statAngelsSummoned').innerHTML = fnum(statAngelsSummoned);
 			}
 			if(localStorage.statTotalAngelsSummoned !== null){
-				statTotalAngelsSummoned = parseInt(localStorage.statTotalAngelsSummoned);
+				statTotalAngelsSummoned = parseStoredInt(localStorage.statTotalAngelsSummoned);
 				document.getElementById('statTotalAngelsSummoned').innerHTML = fnum(statTotalAngelsSummoned);
 			}
 			
 				//Battles
 			if(localStorage.statTotalEnemiesDefeated !== null){
-				statTotalEnemiesDefeated = parseInt(localStorage.statTotalEnemiesDefeated);
+				statTotalEnemiesDefeated = parseStoredInt(localStorage.statTotalEnemiesDefeated);
 				document.getElementById('statTotalEnemiesDefeated').innerHTML = fnum(statTotalEnemiesDefeated);
 			}	
 			if(localStorage.statEnemiesDefeated !== null){
-				statEnemiesDefeated = parseInt(localStorage.statEnemiesDefeated);
+				statEnemiesDefeated = parseStoredInt(localStorage.statEnemiesDefeated);
 				document.getElementById('statEnemiesDefeated').innerHTML = fnum(statEnemiesDefeated);
 			}				
 			if(localStorage.statTotalGoldStolen !== null){
-				statTotalGoldStolen = parseInt(localStorage.statTotalGoldStolen);
+				statTotalGoldStolen = parseStoredInt(localStorage.statTotalGoldStolen);
 				document.getElementById('statTotalGoldStolen').innerHTML = fnum(statTotalGoldStolen);
 			}	
 
 			if(localStorage.statTotalPeasantsKilled !== null){
-				statTotalPeasantsKilled = parseInt(localStorage.statTotalPeasantsKilled);
+				statTotalPeasantsKilled = parseStoredInt(localStorage.statTotalPeasantsKilled);
 				document.getElementById('statTotalPeasantsKilled').innerHTML = fnum(statTotalPeasantsKilled);
 			}			
 			
 			if(localStorage.statTotalMinersKilled !== null){
-				statTotalMinersKilled = parseInt(localStorage.statTotalMinersKilled);
+				statTotalMinersKilled = parseStoredInt(localStorage.statTotalMinersKilled);
 				document.getElementById('statTotalMinersKilled').innerHTML = fnum(statTotalMinersKilled);
 			}	
 
 			if(localStorage.statTotalIronStolen !== null){
-				statTotalIronStolen = parseInt(localStorage.statTotalIronStolen);
+				statTotalIronStolen = parseStoredInt(localStorage.statTotalIronStolen);
 				document.getElementById('statTotalIronStolen').innerHTML = fnum(statTotalIronStolen);
 			}
 
 			if(localStorage.statTotalSilverStolen !== null){
-				statTotalSilverStolen = parseInt(localStorage.statTotalSilverStolen);
+				statTotalSilverStolen = parseStoredInt(localStorage.statTotalSilverStolen);
 				document.getElementById('statTotalSilverStolen').innerHTML = fnum(statTotalSilverStolen);
 			}		
 			if(localStorage.statTotalUnitsSeduced !== null){
-				statTotalUnitsSeduced = parseInt(localStorage.statTotalUnitsSeduced);
+				statTotalUnitsSeduced = parseStoredInt(localStorage.statTotalUnitsSeduced);
 				document.getElementById('statTotalUnitsSeduced').innerHTML = fnum(statTotalUnitsSeduced);
 			}
 			if(localStorage.statUnitsKilledInBattle !== null){
-				statUnitsKilledInBattle = parseInt(localStorage.statUnitsKilledInBattle);
+				statUnitsKilledInBattle = parseStoredInt(localStorage.statUnitsKilledInBattle);
 				document.getElementById('statUnitsKilledInBattle').innerHTML = fnum(statUnitsKilledInBattle);
 			}		
 			
 			if(localStorage.statTotalUnitsKilledInBattle !== null){
-				statTotalUnitsKilledInBattle = parseInt(localStorage.statTotalUnitsKilledInBattle);
+				statTotalUnitsKilledInBattle = parseStoredInt(localStorage.statTotalUnitsKilledInBattle);
 				document.getElementById('statTotalUnitsKilledInBattle').innerHTML = fnum(statTotalUnitsKilledInBattle);
 			}		
 				
 				//Magic
 			if(localStorage.statManaGained !== null){
-				statManaGained = parseInt(localStorage.statManaGained);
+				statManaGained = parseStoredInt(localStorage.statManaGained);
 				document.getElementById('statManaGained').innerHTML = fnum(statManaGained);
 			}
 			if(localStorage.statTotalManaGained !== null){
-				statTotalManaGained = parseInt(localStorage.statTotalManaGained);
+				statTotalManaGained = parseStoredInt(localStorage.statTotalManaGained);
 				document.getElementById('statTotalManaGained').innerHTML = fnum(statTotalManaGained);
 			}
 			if(localStorage.statManaUsed !== null){
-				statManaUsed = parseInt(localStorage.statManaUsed);
+				statManaUsed = parseStoredInt(localStorage.statManaUsed);
 				document.getElementById('statManaUsed').innerHTML = fnum(statManaUsed);
 			}
 			if(localStorage.statTotalManaUsed !== null){
-				statTotalManaUsed = parseInt(localStorage.statTotalManaUsed);
+				statTotalManaUsed = parseStoredInt(localStorage.statTotalManaUsed);
 				document.getElementById('statTotalManaUsed').innerHTML = fnum(statTotalManaUsed);
 			}
 			if(localStorage.statCastedFireBall !== null){
-				statCastedFireBall = parseInt(localStorage.statCastedFireBall);
+				statCastedFireBall = parseStoredInt(localStorage.statCastedFireBall);
 				document.getElementById('statCastedFireBall').innerHTML = fnum(statCastedFireBall);
 			}
 			if(localStorage.statCastedTimeSkip !== null){
-				statCastedTimeSkip = parseInt(localStorage.statCastedTimeSkip);
+				statCastedTimeSkip = parseStoredInt(localStorage.statCastedTimeSkip);
 				document.getElementById('statCastedTimeSkip').innerHTML = fnum(statCastedTimeSkip);
 			}
 			if(localStorage.statTotalCastedFireBall !== null){
-				statTotalCastedFireBall = parseInt(localStorage.statTotalCastedFireBall);
+				statTotalCastedFireBall = parseStoredInt(localStorage.statTotalCastedFireBall);
 				document.getElementById('statTotalCastedFireBall').innerHTML = fnum(statTotalCastedFireBall);
 			}
 			if(localStorage.statTotalCastedTimeSkip !== null){
-				statTotalCastedTimeSkip = parseInt(localStorage.statTotalCastedTimeSkip);
+				statTotalCastedTimeSkip = parseStoredInt(localStorage.statTotalCastedTimeSkip);
 				document.getElementById('statTotalCastedTimeSkip').innerHTML = fnum(statTotalCastedTimeSkip);
 			}
 
