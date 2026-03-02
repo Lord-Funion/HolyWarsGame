@@ -342,15 +342,21 @@ function renameKingdom(){
       if (result === null) {
         return;
       }
-      if (result === "") {
-        KingdomName = "Kingdom";
-      } else {
-        KingdomName = sanitizeInput(result);
-      }
-      document.getElementById("KingdomName").textContent = KingdomName;
-      document.getElementById("navKingdomName").textContent = KingdomName;
-      document.title = "Holy Wars - " + KingdomName;
-    }
+	  if (result === "") {
+	    KingdomName = "Kingdom";
+	  } else {
+	    KingdomName = sanitizeInput(result);
+	  }
+	  var kingdomNameEl = document.getElementById("KingdomName");
+	  var navKingdomNameEl = document.getElementById("navKingdomName");
+	  if (kingdomNameEl) {
+	    kingdomNameEl.textContent = KingdomName;
+	  }
+	  if (navKingdomNameEl) {
+	    navKingdomNameEl.textContent = KingdomName;
+	  }
+	  document.title = "Holy Wars - " + KingdomName;
+	}
   });
 }
 
