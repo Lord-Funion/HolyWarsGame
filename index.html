@@ -135,7 +135,7 @@
                   <li class="dropdown-header"></li>
 				  <li class = 'opt'><a href="#" data-toggle="modal" data-target="#statmodal"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Statistics</a></li>
 				  <li class = 'opt'><a id="AchievmentsMenu" href="javascript:CollapseAll(); toggle('Achievements');">Achievements</a></li>
-				  <li class = 'opt'><a id="verinfo" target="_blank" href="changelog.html"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Version 0.0</a></li>
+				  <li class = 'opt'><a id="verinfo" target="_blank" href="changelog.html"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Version 1.0.0</a></li>
                   <li class = 'opt'><a href="#" data-toggle="modal" data-target="#aboutmodal"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> About</a></li>
                   <li class = 'opt'><a id="reddit" target="_blank" href="http://www.reddit.com/r/incremental_games/comments/34b0p8/holy_wars_update_07/">Reddit Thread</a></li>
                 </ul>
@@ -556,7 +556,7 @@
 			</div>
 			<button id=btnSquireUpgrade class="btn btn-default" type="button" class="btn btn-default" data-toggle="collapse" data-target="#SquireUpgradeTab" aria-expanded="false" aria-controls="SquireUpgradeTab">Upgrades</button>
 			<br />
-			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="SquireCost">1200</span> | <img src = "images/ironsmall.png" title="Iron"> <span id = "SquireIronCost">250</span> | <span id = 'SquireReqUnit'>1 Page</span>
+			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="SquireCost">1200</span> | <img src = "images/ironsmall.png" title="Iron"> <span id = "SquireIronCost">250</span> | <img src = "images/steelsmall.png" title="Steel"> <span id = "SquireSteelCost">20</span> | <span id = 'SquireReqUnit'>1 Page</span>
 			<br />	
 			<div id = "SquireUpgradeTab" class = "upgrade collapse">
 				<div class = "well">
@@ -583,7 +583,7 @@
 			</div>
 			<button id=btnKnightUpgrade class="btn btn-default" type="button" class="btn btn-default" data-toggle="collapse" data-target="#KnightUpgradeTab" aria-expanded="false" aria-controls="KnightUpgradeTab">Upgrades</button>
 			<br />
-			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="KnightCost">3000</span> | <img src = "images/ironsmall.png" title="Iron"> <span id= "KnightIronCost">350</span> | <span id = 'KnightReqUnit'>1 Squire</span>
+			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="KnightCost">3000</span> | <img src = "images/ironsmall.png" title="Iron"> <span id= "KnightIronCost">350</span> | <img src = "images/steelsmall.png" title="Steel"> <span id= "KnightSteelCost">35</span> | <span id = 'KnightReqUnit'>1 Squire</span>
 		
 			<div id = "KnightUpgradeTab" class = "upgrade collapse">
 				<div class = "well">
@@ -603,7 +603,7 @@
 			</div>
 			<button id=btnPageUpgrade class="btn btn-default" type="button" class="btn btn-default" data-toggle="collapse" data-target="#PaladinUpgradeTab" aria-expanded="false" aria-controls="PaladinUpgradeTab">Upgrades</button>
 			<br />
-			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="PaladinCost">10,000</span> | <img src = "images/ironsmall.png" title="Iron"> <span id="PaladinIronCost">500</span> | <img src = "images/silverOresmall.png" title="Silver"> <span id="PaladinSilverCost">50</span> | <img src = "images/faithsmall.png" title="Faith"> <span id="PaladinFaithCost">100</span> | <span id = 'PaladinReqUnit'>1 Knight</span>
+			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="PaladinCost">10,000</span> | <img src = "images/ironsmall.png" title="Iron"> <span id="PaladinIronCost">500</span> | <img src = "images/steelsmall.png" title="Steel"> <span id="PaladinSteelCost">100</span> | <img src = "images/silverOresmall.png" title="Silver"> <span id="PaladinSilverCost">50</span> | <img src = "images/faithsmall.png" title="Faith"> <span id="PaladinFaithCost">100</span> | <span id = 'PaladinReqUnit'>1 Knight</span>
 			<br />
 		</div>
 		<div id = "PaladinUpgradeTab" class = "upgrade collapse" >
@@ -675,8 +675,8 @@
 		</div>			
 
 		<div id ="AngelTab" class = "container" style="display: none;">
-		<a id = 'BtnAngelDesc' tabindex="0" class="btn btn-sm btn-primary" role="button" data-toggle="popover"  data-trigger="focus" data-html="true" title="Angels"
-    		data-content="">Angels <span class='badge' id="angels">0</span></a>
+		<a id = 'BtnAngelDesc' tabindex="0" class="btn btn-sm btn-primary" role="button" data-toggle="popover"  data-trigger="focus" data-html="true" title="Archangels"
+			data-content="">Archangels <span class='badge' id="angels">0</span></a>
 			<br /><br />
 			<div class="btn-group" role="group" aria-label="...">
 				<button id=btnBuyAngel onclick="Angel.buyOne()"	type="button" class="btn btn-default">Summon Angel</button>
@@ -684,7 +684,7 @@
 			</div>
 			<button id=btnAngelUpgrade class="btn btn-default" type="button" class="btn btn-default" data-toggle="collapse" data-target="#AngelUpgradeTab" aria-expanded="false" aria-controls="AngelUpgradeTab">Upgrades</button>
 			<br />
-			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="AngelCost">200,000</span> | <img src = "images/ironsmall.png" title="Iron"> <span id="angelIronCost">500</span> | <img src = "images/silverOresmall.png" title="Silver"> <span id="angelSilverCost">2500</span> | <img src = "images/faithsmall.png" title="Faith"> <span id="angelFaithCost">25000</span> | <img src = "images/soulssmall.png" title="Souls"> <span id="angelSoulCost">1500</span> | <img src = "images/bookssmall.png" Title="Tomes"> <span id="angelTomeCost">20</span>
+			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="AngelCost">200,000</span> | <img src = "images/ironsmall.png" title="Iron"> <span id="angelIronCost">500</span> | <img src = "images/steelsmall.png" title="Steel"> <span id="angelSteelCost">2500</span> | <img src = "images/silverOresmall.png" title="Silver"> <span id="angelSilverCost">2500</span> | <img src = "images/faithsmall.png" title="Faith"> <span id="angelFaithCost">25000</span> | <img src = "images/soulssmall.png" title="Souls"> <span id="angelSoulCost">1500</span> | <img src = "images/bookssmall.png" Title="Tomes"> <span id="angelTomeCost">20</span>
 			<div id ="AngelUpgradeTab" class = "upgrade collapse">
 				<div class = "well">
 					<button id=btnAngelUpgrade1 onclick="angelUpgrade1.buyUpgrade()"	type="button" class="btn btn-default" title = "The piety from your paladins now strengthens your Angels. Each Paladin increases your angel's spirit power by 5.">Concentrated Piety</button>
@@ -939,8 +939,8 @@
 		</div>
 
 		<div id ="ArcaneSpritesTab" class = "container" style="display: none;">
-		<a id = 'BtnSpritesDesc' tabindex="0" class="btn btn-sm btn-primary" role="button" data-toggle="popover"  data-trigger="focus" data-html="true" title="Arcane Sprites"
-    		data-content="">Arcane Sprites <span class='badge' id="sprites">0</span></a>
+		<a id = 'BtnSpritesDesc' tabindex="0" class="btn btn-sm btn-primary" role="button" data-toggle="popover"  data-trigger="focus" data-html="true" title="Seraphim"
+			data-content="">Seraphim <span class='badge' id="sprites">0</span></a>
 			<br /><br />
 			<div class="btn-group" role="group" aria-label="...">
 				<button id=btnBuySprite onclick="Sprite.buyOne()"	type="button" class="btn btn-default">Summon Arcane Sprite</button>
@@ -948,10 +948,10 @@
 			</div>
 			<button id=btnSpritesUpgrade class="btn btn-default" type="button" class="btn btn-default" data-toggle="collapse" data-target="#SpritesUpgradeTab" aria-expanded="false" aria-controls="AngelUpgradeTab">Upgrades</button>
 			<br />
-			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="SpriteCost">750,000</span> | <img src = "images/silverOresmall.png" title="Silver"> <span id="spriteSilverCost">500,000</span> | <img src = "images/faithsmall.png" title="Faith"> <span id="spriteFaithCost">50000</span> | <img src = "images/soulssmall.png" title="Souls"> <span id="spriteSoulCost">2000</span> | <img src = "images/bookssmall.png" Title="Tomes"> <span id="spriteTomeCost">25</span> | <img src = "images/manasmall.png" Title="Mana"><span id ="spriteManaCost">2,000</span>
+			<img src = "images/money_goldsmall.png" title ="Gold" > <span id="SpriteCost">750,000</span> | <img src = "images/steelsmall.png" title="Steel"> <span id="spriteSteelCost">2500</span> | <img src = "images/silverOresmall.png" title="Silver"> <span id="spriteSilverCost">500,000</span> | <img src = "images/faithsmall.png" title="Faith"> <span id="spriteFaithCost">50000</span> | <img src = "images/soulssmall.png" title="Souls"> <span id="spriteSoulCost">2000</span> | <img src = "images/bookssmall.png" Title="Tomes"> <span id="spriteTomeCost">25</span> | <img src = "images/manasmall.png" Title="Mana"><span id ="spriteManaCost">2,000</span>
 			<div id ="SpritesUpgradeTab" class = "upgrade collapse">
 				<div class = "well">
-					 No Upgrades implemented for Sprites yet.
+					 No Upgrades implemented for Seraphim yet.
 					<br />
 				</div>
 			</div>
@@ -1018,7 +1018,7 @@
 							<option id = "PeopleChoice" >Help the People</option>
 							<option id = "TreantChoice">Slay Treants</option>
 							<option id = "IGolemChoice">Slay Iron Golems</option>
-							<option id = "SpriteChoice">Aid the Sprites</option>
+							<option id = "SpriteChoice">Aid the Seraphim</option>
 							<option id = "DemonChoice">Hunt Lesser Demons</option>							
 							<option id = "RelicChoice">Relic Hunt</option>
 							<option id = "FaithChoice">Spread the Gospel</option>
@@ -1930,9 +1930,9 @@
 			Angels summoned this game: <span id= "statAngelsSummoned">0</span><br />
 			Lifetime Angels summoned: <span id = "statTotalAngelsSummoned">0</span><br /><br />
 
-			<h4>Sprites</h4>
-			Sprites summoned this game: <span id= "statSpritesSummoned">0</span><br />
-			Lifetime Sprites summoned: <span id = "statTotalSpritesSummoned">0</span><br /><br />					
+			<h4>Seraphim</h4>
+			Seraphim summoned this game: <span id= "statSpritesSummoned">0</span><br />
+			Lifetime Seraphim summoned: <span id = "statTotalSpritesSummoned">0</span><br /><br />
 			
 			<h3>Structures</h3>
 			<h4>Taverns</h4>

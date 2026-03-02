@@ -645,7 +645,7 @@ var Squire = new Unit(
 /*htmlNumRef*/		'squires',
 /*htmlNextGoldCost*/'SquireCost',
 /*htmlNextIronCost*/'SquireIronCost',
-/*htmlNextSteelCost*/'none',
+/*htmlNextSteelCost*/'SquireSteelCost',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -655,7 +655,7 @@ var Squire = new Unit(
 /*htmlBuyBtn10*/	'btnBuySquire10',
 /*goldCost*/		1200,
 /*ironCost*/		250,
-/*steelCost*/		0,
+/*steelCost*/		20,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -677,7 +677,7 @@ var Knight = new Unit(
 /*htmlNumRef*/		'knights',
 /*htmlNextGoldCost*/'KnightCost',
 /*htmlNextIronCost*/'KnightIronCost',
-/*htmlNextSteelCost*/'none',
+/*htmlNextSteelCost*/'KnightSteelCost',
 /*htmlNextSilverCost*/'none',
 /*htmlNextFaithCost*/'none',
 /*htmlNextSoulCost*/'none',
@@ -687,7 +687,7 @@ var Knight = new Unit(
 /*htmlBuyBtn10*/	'btnBuyKnight10',
 /*goldCost*/		3000,
 /*ironCost*/		350,
-/*steelCost*/		0,
+/*steelCost*/		35,
 /*silverCost*/		0,
 /*faithCost*/		0,
 /*soulCost*/		0,
@@ -709,7 +709,7 @@ var Paladin = new Unit(
 /*htmlNumRef*/		'paladins',
 /*htmlNextGoldCost*/'PaladinCost',
 /*htmlNextIronCost*/'PaladinIronCost',
-/*htmlNextSteelCost*/'none',
+/*htmlNextSteelCost*/'PaladinSteelCost',
 /*htmlNextSilverCost*/'PaladinSilverCost',
 /*htmlNextFaithCost*/'PaladinFaithCost',
 /*htmlNextSoulCost*/'none',
@@ -719,7 +719,7 @@ var Paladin = new Unit(
 /*htmlBuyBtn10*/	'btnBuyPaladin10',
 /*goldCost*/		10000,
 /*ironCost*/		500,
-/*steelCost*/		0,
+/*steelCost*/		100,
 /*silverCost*/		100,
 /*faithCost*/		50,
 /*soulCost*/		0,
@@ -951,14 +951,14 @@ setArmyPower(Aspect, 100);
 setSpiritPower(Aspect, 50);
 setClickVal(Aspect, 'souls', 2);
 
-var angelDesc = "Divine warriors capable of flight summoned down from the heavens. They smell vaguely like freshly baked brownies.";
+var angelDesc = "Archangels are elite divine warriors capable of flight, summoned from the heavens to lead your celestial host.";
 //var Angel = new Unit("Angel",'angels','AngelCost','angelIronCost','angelSilverCost','angelFaithCost','angelSoulCost','angelTomeCost','none','btnBuyAngel',200000,500,2500,25000,1500,20,0,1.15, angelDesc, 0, false, "none", 'none');
 var Angel = new Unit(
 /*Name*/			"Angel",
 /*htmlNumRef*/		'angels',
 /*htmlNextGoldCost*/'AngelCost',
 /*htmlNextIronCost*/'angelIronCost',
-/*htmlNextSteelCost*/'none',
+/*htmlNextSteelCost*/'angelSteelCost',
 /*htmlNextSilverCost*/'angelSilverCost',
 /*htmlNextFaithCost*/'angelFaithCost',
 /*htmlNextSoulCost*/'angelSoulCost',
@@ -968,7 +968,7 @@ var Angel = new Unit(
 /*htmlBuyBtn10*/	'btnBuyAngel10',
 /*goldCost*/		200000,
 /*ironCost*/		500,
-/*steelCost*/		0,
+/*steelCost*/		2500,
 /*silverCost*/		2500,
 /*faithCost*/		25000,
 /*soulCost*/		1500,
@@ -994,14 +994,14 @@ Angel.totalSpiritPower = function(){
 	}
 };
 
-var spriteDesc = "These petite, fairy-like creatures are intensely attracted to the arcane aura emanating from your tower. Just being around them makes your mind sharpen to the arcane energies of the universe.";
+var spriteDesc = "Seraphim are ascended spirit beings drawn to the tower's arcane aura. Their presence amplifies your mana attunement.";
 //var Sprite = new Unit("Sprite",'sprites','SpriteCost','none','spriteSilverCost','spriteFaithCost','spriteSoulCost','spriteTomeCost', 'spriteManaCost','btnBuySprite',750000,500000,2500,50000,2000,25,2000,1.5, spriteDesc, 0, false, "none", 'none');
 var Sprite = new Unit(
 /*Name*/			"Sprite",
 /*htmlNumRef*/		'sprites',
 /*htmlNextGoldCost*/'SpriteCost',
 /*htmlNextIronCost*/'none',
-/*htmlNextSteelCost*/'none',
+/*htmlNextSteelCost*/'spriteSteelCost',
 /*htmlNextSilverCost*/'spriteSilverCost',
 /*htmlNextFaithCost*/'spriteFaithCost',
 /*htmlNextSoulCost*/'spriteSoulCost',
@@ -1011,7 +1011,7 @@ var Sprite = new Unit(
 /*htmlBuyBtn10*/	'btnBuySprite10',
 /*goldCost*/		750000,
 /*ironCost*/		0,
-/*steelCost*/		0,
+/*steelCost*/		2500,
 /*silverCost*/		2500,
 /*faithCost*/		50000,
 /*soulCost*/		2000,
