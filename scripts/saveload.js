@@ -65,6 +65,18 @@ function parseStoredFloat(value) {
   return Number.isNaN(parsed) ? 0 : parsed;
 }
 
+function isOlderMajorSaveVersion(savedVersion, currentVersion) {
+	if (savedVersion === null || savedVersion === undefined || savedVersion === '') {
+		return false;
+	}
+	var savedMajor = parseInt(String(savedVersion).split('.')[0], 10);
+	var currentMajor = parseInt(String(currentVersion).split('.')[0], 10);
+	if (Number.isNaN(savedMajor) || Number.isNaN(currentMajor)) {
+		return false;
+	}
+	return savedMajor < currentMajor;
+}
+
 function hydrateLegacyStorageFromPrefixed() {
   try {
     Object.keys(localStorage).forEach(function (storageKey) {
@@ -1242,7 +1254,7 @@ function hydrateLegacyStorageFromPrefixed() {
 				if(savedGameVersion !== null && savedGameVersion !== undefined){
 					gameSaveVer = savedGameVersion;
 					console.log("Save version: " + gameSaveVer);
-					if(gameSaveVer.substring(0,3) < gameVer.substring(0,3) || gameSaveVer === '' || Number.isNaN(Number(gameSaveVer))){			//Uses major version as metric for reset
+					if(isOlderMajorSaveVersion(gameSaveVer, gameVer)){			//Uses major version as metric for reset
 						alert("The game save data you have came from a too old previous version of the game, and in order to get the best experience, a hard reset is in order. Apologies for the inconvenience!");
 							deleteCookie();
 							location.reload(true);
