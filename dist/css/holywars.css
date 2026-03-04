@@ -134,15 +134,21 @@ legend { width: 75%; }
 }
 
 .questComponent {
-  width: 240px;
-  min-height: 120px;
+  width: auto;
+  min-height: 0;
   float: left;
-  margin: 12px;
-  padding: 12px;
-  background: var(--hw-surface);
-  border: 1px solid var(--hw-border);
-  border-radius: 12px;
-  box-shadow: var(--hw-shadow);
+  margin: 12px 12px 0 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#questContainer::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .battle { color: var(--hw-danger); }
@@ -163,6 +169,21 @@ legend { width: 75%; }
   margin-left: 10px;
   width: auto;
   float: left;
+}
+
+#SpellsDiv .spell {
+  margin: 12px 12px 0 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#SpellsDiv::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .relicbought {
