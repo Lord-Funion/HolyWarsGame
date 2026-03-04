@@ -112,7 +112,7 @@ legend { width: 75%; }
 #GatherListWell input,
 #arrowpanel input { outline: 0; }
 
-#SpellsDiv div,
+#SpellsDiv > div,
 #AchievementsDiv div,
 #dwarfshop,
 #questContainer { display: inline-block; }
@@ -171,13 +171,30 @@ legend { width: 75%; }
   float: left;
 }
 
+#Magic .container {
+  width: 100%;
+}
+
+#SpellsDiv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
 #SpellsDiv .spell {
-  margin: 12px 12px 0 0;
+  margin: 0;
   padding: 0;
+  min-width: 220px;
   background: transparent;
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  float: none;
+}
+
+#ArcaneSpritesTab .btn-group {
+  margin-bottom: 8px;
 }
 
 #SpellsDiv::after {
