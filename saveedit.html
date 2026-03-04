@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOR Crypto Editor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+        }
+        h2 { text-align: center; color: #4b6cb7; margin-top: 0; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th { background-color: #f8f9fa; }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 5px;
+        }
+        .btn-decrypt { background: #4b6cb7; color: white; }
+        .btn-decrypt:hover { background: #182848; }
+        .btn-encrypt { background: #28a745; color: white; }
+        .btn-encrypt:hover { background: #218838; }
+        .output-box {
+            margin-top: 1rem;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>XOR Data Editor</h2>
+    
+    <div class="form-group">
+        <label>Encrypted String:</label>
+        <input type="text" id="inputString" placeholder="Paste encrypted string here...">
+        <button class="btn btn-decrypt" onclick="handleDecrypt()">Decrypt & Load Table</button>
+    </div>
+
+    <table id="dataTable" style="display:none;">
+        <thead>
+            <tr><th>Value (Editable)</th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <button id="encryptBtn" class="btn btn-encrypt" style="display:none;" onclick="handleEncrypt()">Re-encrypt Table Data</button>
+
+    <div id="outputArea" style="display:none;">
+        <label>New Encrypted String:</label>
+        <div class="output-box" id="resultString"></div>
+    </div>
+</div>
+
+<script>
+// Your provided Logic
+function xor_str(input) {
+    var to_enc = input;
+    var xor_key = 6;
+    var the_res="";
+    for(i=0;i<to_enc.length;++i) {
+        the_res+=String.fromCharCode(xor_key^to_enc.charCodeAt(i));
+    }
+    return(the_res);
+}
+
+function decrypt_str(input) {
+    var to_dec = input;
+    var the_res = "";
+    var xor_key=6;
+    for(i=0;i<to_dec.length;i++) {
+        the_res+=String.fromCharCode(xor_key^to_dec.charCodeAt(i));
+    }
+    return the_res;
+}
+
+// UI Handling
+function handleDecrypt() {
+    const input = document.getElementById('inputString').value;
+    if(!input) return alert("Please enter a string");
+
+    const decrypted = decrypt_str(input);
+    const items = decrypted.split(',');
+    
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    items.forEach(item => {
+        const row = `<tr><td contenteditable="true">${item.trim()}</td></tr>`;
+        tbody.innerHTML += row;
+    });
+
+    document.getElementById('dataTable').style.display = 'table';
+    document.getElementById('encryptBtn').style.display = 'block';
+}
+
+function handleEncrypt() {
+    const rows = document.querySelectorAll('#tableBody td');
+    let values = [];
+    rows.forEach(td => values.push(td.innerText));
+    
+    const plainString = values.join(',');
+    const encrypted = xor_str(plainString);
+    
+    document.getElementById('outputArea').style.display = 'block';
+    document.getElementById('resultString').innerText = encrypted;
+}
+</script>
+
+</body>
+</html>
